@@ -109,9 +109,11 @@ flowchart LR
   I --> M[③ Analítica determinística<br>series · forma · versiones · NPS · clientes]
   M --> AN[④ Agente Analista de KPIs<br>evidencia vs. KPI nuevo + baseline]
   AN --> D[⑤ Agente Detector de desvíos<br>alertas priorizadas]
+  D --> MJ[⑥ Agente Mejoras sugeridas<br>opcional · historias por KPI]
   D --> P{--publicar}
   AN --> P
-  P --> JO[(Jira: KPIs y alertas<br>en Propuesto)]
+  MJ --> P
+  P --> JO[(Jira: KPIs, alertas y mejoras<br>en Propuesto)]
   P --> NO[(Notion: campos agente)]
   D --> R[Reporte local<br>reporte.md + resultado.json]
 ```
@@ -253,7 +255,7 @@ data/grabaciones/demo/   respuestas grabadas del modelo para la demo sin credenc
 docs/                    definición de producto, guía manual y reporte de ejemplo
 scripts/reiniciar-notion.ts  deja feedback sin procesar para una demo
 scripts/evaluar.ts       evaluación contra las respuestas esperadas
-src/agentes/             los cuatro agentes
+src/agentes/             los cinco agentes (el de mejoras es opcional)
 src/analitica/           métricas determinísticas
 src/fuentes/             Notion, Jira y fixtures
 src/salidas/             reporte local y publicación
