@@ -26,7 +26,7 @@ type Esfuerzo = "low" | "medium" | "high" | "xhigh" | "max";
 
 const MODELO_POR_DEFECTO: Record<Proveedor, string> = {
   anthropic: "claude-opus-5-5",
-  gemini: "gemini-3.5-flash",
+  gemini: "gemini-3.6-flash",
   openrouter: "nvidia/nemotron-3-super-120b-a12b:free",
 };
 const API_KEY: Record<Proveedor, string> = {

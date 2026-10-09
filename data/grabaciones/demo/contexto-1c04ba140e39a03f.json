@@ -1,17 +1,18 @@
 {
   "agente": "contexto",
   "proveedor": "gemini",
-  "modelo": "gemini-3.5-flash",
+  "modeloPedido": "gemini-3.6-flash",
+  "modelo": "gemini-3.6-flash",
   "esfuerzo": "low",
-  "grabado": "2026-10-09T14:32:44.690Z",
-  "duracionMs": 11045,
+  "grabado": "2026-10-09T15:51:37.909Z",
+  "duracionMs": 67105,
   "uso": {
     "entrada": 1214,
-    "salida": 660
+    "salida": 652
   },
   "salida": {
     "nombre": "Cobros Recurrentes",
-    "problema": "Una persona o entidad chica (un particular, una sociedad de fomento, un profesional independiente, una pyme) necesita cobrarle a sus pagadores un monto recurrente y sin fecha de fin, pero actualmente lo hace manualmente perdiendo claridad de quién pagó. El producto busca resolver esto sin que el pagador cree una cuenta y sin manejar datos sensibles de pago.",
+    "problema": "Una persona o entidad chica necesita cobrarle a sus pagadores un monto recurrente y sin fecha de fin, pero actualmente lo hace con planillas, cuadernos y mensajes a mano. Esto provoca que deba perseguir a cada pagador y juntar comprobantes sin saber con claridad quién pagó. El producto resuelve este problema sin pedirle al pagador que cree una cuenta y sin manejar datos sensibles de pago.",
     "objetivos": [
       "Para el emisor: cobrar a tiempo, con menos esfuerzo manual, y saber en todo momento quién pagó y quién no.",
       "Para el pagador: enterarse a tiempo de lo que tiene que pagar y avisar que pagó sin fricción.",
@@ -20,14 +21,14 @@
     "usuarios": [
       {
         "tipo": "Emisor",
-        "descripcion": "Es quien cobra. Es el único que entra al panel de administración (con usuario y contraseña) para configurar pagadores, pagos, revisar comprobantes, conciliar y dar de baja pagos."
+        "descripcion": "Es quien cobra y el único que entra al panel de administración. Configura pagadores y pagos, revisa comprobantes, concilia y da de baja pagos."
       },
       {
         "tipo": "Pagador",
-        "descripcion": "Es quien paga. No tiene cuenta ni entra a ningún sistema. Recibe el pedido de cobro por mail, paga por el medio que prefiera y responde el mismo mail con la foto o el PDF del comprobante."
+        "descripcion": "Es quien paga. No tiene cuenta ni entra a ningún sistema; recibe el pedido de cobro por mail, paga y responde el mail con el comprobante."
       }
     ],
-    "flujo": "El emisor da de alta a sus pagadores y configura cada pago. En cada vencimiento, el sistema genera una cuota y le envía un mail de cobro al pagador. El pagador responde adjuntando el comprobante, lo cual cambia el estado de la cuota a pendiente de revisión para que el emisor revise y apruebe o rechace manualmente desde su panel.",
+    "flujo": "El emisor da de alta a sus pagadores y configura cada pago. En cada vencimiento, el sistema genera una cuota y envía el pedido de cobro por mail. El pagador responde con el comprobante adjunto pasándolo a PENDIENTE DE REVISIÓN, y finalmente el emisor revisa el comprobante en el panel marcándolo como PAGADO o NO PAGADO.",
     "limitaciones": [
       "El único canal disponible es el mail. WhatsApp está planificado pero no disponible.",
       "No hay recordatorios automáticos al pagador antes ni después del vencimiento.",

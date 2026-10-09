@@ -139,7 +139,8 @@ flowchart LR
 
 | Configuración (los 4 agentes) | Evaluación |
 |---|---|
-| **Gemini 3.5 Flash** (por defecto; es la que usa la demo grabada) | **20/20** |
+| **Gemini 3.6 Flash** (por defecto; es la que usa la demo grabada) | **20/20** |
+| Gemini 3.5 Flash | 20/20 |
 | OpenRouter gratuito: Intérprete `dots-3-note`, Analista `dots-3-note`, Detector `nemotron-3-super` | 16/20 |
 | OpenRouter gratuito: Intérprete `nemotron-3-super`, Analista `dots-3-note`, Detector `nemotron-3-super` | 13/20 |
 | OpenRouter gratuito: Intérprete `dots-3-note`, Analista y Detector `nemotron-3-super` | 12/20 |
@@ -221,6 +222,6 @@ src/pipeline.ts          orquestador
 ## Limitaciones y próximos pasos
 
 - El feedback de prueba es simulado; falta validar con productos y volúmenes reales.
-- El Intérprete a veces nombra un tema por la solución que piden los clientes ("canal WhatsApp") en vez de por el problema de fondo ("el mail no llega"); la detección es correcta, pero el nombre se puede mejorar.
+- Los modelos gratuitos tienen cuotas diarias chicas y se saturan seguido; el agente reintenta solo, pero para uso diario conviene un plan pago o repartir agentes entre proveedores.
 - Con miles de feedbacks por corrida habría que clasificar en lotes con un modelo más chico y resumir antes de analizar.
 - Próximo: medir el impacto de cada versión sobre los KPIs aprobados, sumar más fuentes (soporte, tiendas de apps, analítica) y el backlog de mejoras sugeridas vinculadas a cada KPI.

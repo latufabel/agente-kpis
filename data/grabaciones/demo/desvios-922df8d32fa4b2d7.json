@@ -1,0 +1,255 @@
+{
+  "agente": "desvios",
+  "proveedor": "gemini",
+  "modeloPedido": "gemini-3.6-flash",
+  "modelo": "gemini-3.6-flash",
+  "esfuerzo": "high",
+  "grabado": "2026-10-09T15:57:17.879Z",
+  "duracionMs": 122037,
+  "uso": {
+    "entrada": 8157,
+    "salida": 2937
+  },
+  "salida": {
+    "resumen_ejecutivo": "Se detectó una regresión crítica tras el despliegue de la versión v1.3 el 10 de septiembre, la cual generó un pico de 20 fallas en la detección de comprobantes adjuntos por mail, impactando directamente en la experiencia de emisores y pagadores. Adicionalmente, persiste un problema estructural de insatisfacción por la carga de trabajo que genera la conciliación manual a medida que los emisores aumentan su volumen de pagadores, junto con reclamos sostenidos sobre el canal de correo y la falta de alertas de morosidad. Se priorizan cuatro alertas de desvío con foco inmediato en revertir la falla técnica de v1.3 y atender a los clientes de mayor volumen en riesgo de churn.",
+    "alertas": [
+      {
+        "alerta_existente": null,
+        "titulo": "Regresión crítica en la recepción y detección de comprobantes post lanzamiento v1.3",
+        "severidad": "critica",
+        "prioridad": 1,
+        "tipo": "regresion",
+        "forma": "pico",
+        "temas": [
+          "Fallas en la recepción y detección de comprobantes"
+        ],
+        "kpis_relacionados": [
+          "Tasa de fallas en la detección de comprobantes por correo"
+        ],
+        "version_relacionada": "v1.3",
+        "descripcion": "Inmediatamente después del lanzamiento de v1.3 el 10/09/2026, surgieron 20 reportes de fallas donde los correos con comprobantes enviados por los pagadores no cambian el estado a PENDIENTE DE REVISIÓN.",
+        "hipotesis_causa": "El nuevo procesamiento de mails entrantes implementado en v1.3 para mejorar el rendimiento y la compatibilidad con el celular introdujo un fallo en el parseo o captura de archivos adjuntos.",
+        "evidencia": [
+          "FB-84",
+          "FB-85",
+          "FB-86",
+          "FB-87",
+          "FB-89",
+          "FB-90",
+          "FB-91",
+          "FB-92",
+          "FB-94",
+          "FB-95",
+          "FB-96",
+          "FB-97",
+          "FB-99",
+          "FB-101",
+          "FB-103",
+          "FB-105",
+          "FB-107",
+          "FB-108",
+          "FB-111",
+          "FB-115"
+        ],
+        "clientes_en_riesgo": [
+          {
+            "cliente": "EM-007",
+            "motivo": "NPS en caída drástica de 7 a 2 tras registrar fallas de recepción junto con sobrecarga de conciliación."
+          },
+          {
+            "cliente": "EM-025",
+            "motivo": "NPS en caída de 7 a 3 con reportes de fallas en recepción desde la v1.3."
+          },
+          {
+            "cliente": "EM-021",
+            "motivo": "Acumula 6 feedbacks negativos, incluyendo fallas de detección en v1.3 y 180 pagadores afectados."
+          },
+          {
+            "cliente": "EM-031",
+            "motivo": "Acumula 6 feedbacks negativos con fallas en detección post v1.3."
+          }
+        ],
+        "advertencias": [
+          "El NPS del período de septiembre (-100) y de la versión v1.3 (-100) cuenta con solo 9 y 7 respuestas respectivamente (muestra chica < 30 respuestas), por lo que debe interpretarse como señal de alerta cualitativa y no como un indicador estadísticamente definitivo."
+        ],
+        "proximos_pasos": [
+          "Hacer roll-back o hotfix del módulo de procesamiento de mails entrantes introducido en v1.3.",
+          "Revisar los logs de recepción de mails del 11 al 27 de septiembre para procesar retroactivamente los comprobantes no detectados.",
+          "Contactar proactivamente a los clientes EM-007, EM-025, EM-021 y EM-031 para darles soporte directo y confirmar la resolución."
+        ]
+      },
+      {
+        "alerta_existente": null,
+        "titulo": "Fricción creciente por sobrecarga operacional en la conciliación manual al escalar pagadores",
+        "severidad": "alta",
+        "prioridad": 2,
+        "tipo": "tendencia_creciente",
+        "forma": "creciente",
+        "temas": [
+          "Carga de trabajo en conciliación manual"
+        ],
+        "kpis_relacionados": [
+          "Tiempo promedio de conciliación por comprobante"
+        ],
+        "version_relacionada": null,
+        "descripcion": "El volumen de quejas por el trabajo manual de revisar comprobante por comprobante muestra una tendencia creciente mes a mes (3 en julio, 7 en agosto, 9 en septiembre), concentrándose en emisores con carteras grandes de pagadores.",
+        "hipotesis_causa": "A medida que el emisor suma más pagadores (ej. clubes o pymes con 100+ pagadores), la revisión y aprobación individual de comprobantes no escala y exige un esfuerzo excesivo.",
+        "evidencia": [
+          "FB-7",
+          "FB-17",
+          "FB-24",
+          "FB-36",
+          "FB-40",
+          "FB-49",
+          "FB-53",
+          "FB-58",
+          "FB-62",
+          "FB-73",
+          "FB-74",
+          "FB-77",
+          "FB-80",
+          "FB-93",
+          "FB-100",
+          "FB-109",
+          "FB-112",
+          "FB-116",
+          "FB-119"
+        ],
+        "clientes_en_riesgo": [
+          {
+            "cliente": "EM-007",
+            "motivo": "6 reclamos recurrentes por conciliación manual (140 pagadores); NPS cayó a 2."
+          },
+          {
+            "cliente": "EM-031",
+            "motivo": "6 reclamos recurrentes por conciliación manual (110 pagadores)."
+          },
+          {
+            "cliente": "EM-021",
+            "motivo": "5 reclamos recurrentes por conciliación manual (180 pagadores)."
+          }
+        ],
+        "advertencias": [
+          "Muestra cualitativa acotada a 5 clientes únicos recurrentes, aunque representan un alto porcentaje del volumen total de pagadores de la plataforma."
+        ],
+        "proximos_pasos": [
+          "Diseñar e implementar acciones masivas en el panel de administración (ej. aprobación en lote / masiva de comprobantes).",
+          "Explorar opciones de pre-validación automática o lectura básica de adjuntos para acelerar la conciliación."
+        ]
+      },
+      {
+        "alerta_existente": null,
+        "titulo": "Problema crónico de efectividad por uso exclusivo del canal correo electrónico",
+        "severidad": "media",
+        "prioridad": 3,
+        "tipo": "problema_cronico",
+        "forma": "constante",
+        "temas": [
+          "Baja apertura del correo electrónico y preferencia por WhatsApp"
+        ],
+        "kpis_relacionados": [
+          "DEMO-1"
+        ],
+        "version_relacionada": null,
+        "descripcion": "Reclamo constante (6 menciones mensuales sostenidas) por la baja tasa de apertura de mails por parte de los pagadores y la solicitud persistente de integrar WhatsApp como canal de cobro.",
+        "hipotesis_causa": "El canal de correo electrónico presenta menor tasa de lectura en ciertos segmentos (particulares, socios de clubes y profesionales independientes), lo que obliga a los emisores a perseguir manualmente a los pagadores por fuera del sistema.",
+        "evidencia": [
+          "FB-3",
+          "FB-11",
+          "FB-13",
+          "FB-23",
+          "FB-27",
+          "FB-31",
+          "FB-37",
+          "FB-42",
+          "FB-47",
+          "FB-59",
+          "FB-64",
+          "FB-68",
+          "FB-75",
+          "FB-81",
+          "FB-88",
+          "FB-98",
+          "FB-113",
+          "FB-118"
+        ],
+        "clientes_en_riesgo": [
+          {
+            "cliente": "EM-014",
+            "motivo": "5 reclamos por canal de cobro/WhatsApp; NPS cayó de 6 a 3."
+          },
+          {
+            "cliente": "EM-011",
+            "motivo": "5 reclamos sobre el uso de correo y preferencia por WhatsApp."
+          },
+          {
+            "cliente": "EM-036",
+            "motivo": "4 reclamos reiterados sobre la baja efectividad del mail frente a WhatsApp."
+          }
+        ],
+        "advertencias": [
+          "WhatsApp está fuera de alcance según las limitaciones actuales del producto, por lo que requerirá evaluación de Discovery de Producto."
+        ],
+        "proximos_pasos": [
+          "Priorizar en el roadmap la integración o envío de recordatorios/links de cobro mediante WhatsApp.",
+          "Proporcionar temporalmente a los emisores un enlace directo de cobro que puedan copiar y enviar manualmente por WhatsApp."
+        ]
+      },
+      {
+        "alerta_existente": null,
+        "titulo": "Falta crónica de notificaciones de cuotas impagas y seguimiento de morosidad",
+        "severidad": "media",
+        "prioridad": 4,
+        "tipo": "problema_cronico",
+        "forma": "constante",
+        "temas": [
+          "Ausencia de alertas de cuotas impagas"
+        ],
+        "kpis_relacionados": [
+          "Tiempo promedio de detección de cuotas impagas"
+        ],
+        "version_relacionada": null,
+        "descripcion": "Menciones constantes (15 feedbacks acumulados, 4-6 por mes) solicitando alertas automáticas cuando un pagador no abona su cuota al vencimiento.",
+        "hipotesis_causa": "Al no existir alertas o resúmenes periódicos para el emisor sobre pagos vencidos, la detección de impagos depende 100% de la revisión manual del panel, incrementando el tiempo de detección de mora.",
+        "evidencia": [
+          "FB-9",
+          "FB-15",
+          "FB-21",
+          "FB-30",
+          "FB-43",
+          "FB-44",
+          "FB-52",
+          "FB-60",
+          "FB-71",
+          "FB-78",
+          "FB-82",
+          "FB-102",
+          "FB-110",
+          "FB-114",
+          "FB-120"
+        ],
+        "clientes_en_riesgo": [
+          {
+            "cliente": "EM-034",
+            "motivo": "4 reclamos recurrentes por la falta de alertas sobre morosos."
+          },
+          {
+            "cliente": "EM-018",
+            "motivo": "3 reclamos negativos sobre seguimiento de cuotas no pagadas."
+          },
+          {
+            "cliente": "EM-029",
+            "motivo": "3 reclamos registrados vinculados a la detección e información de impagos."
+          }
+        ],
+        "advertencias": [
+          "Muestra de feedback cualitativo constante pero acotada a 6 clientes únicos."
+        ],
+        "proximos_pasos": [
+          "Diseñar e implementar un correo resumen diario/semanal para el emisor con el listado de cuotas vencidas no pagadas.",
+          "Agregar un indicador visual destacado en el panel para cuotas vencidas sin comprobante adjunto."
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "agente": "analista",
+  "proveedor": "gemini",
+  "modeloPedido": "gemini-3.6-flash",
+  "modelo": "gemini-3.6-flash",
+  "esfuerzo": "high",
+  "grabado": "2026-10-09T15:55:15.840Z",
+  "duracionMs": 65020,
+  "uso": {
+    "entrada": 9321,
+    "salida": 2229
+  },
+  "salida": {
+    "decisiones_temas": [
+      {
+        "tema": "Fallas en la recepción y detección de comprobantes",
+        "decision": "accionable",
+        "justificacion": "Es una regresión técnica crítica tras la versión v1.3 que afecta a 20 clientes, donde los comprobantes enviados como imágenes en el cuerpo del correo no son procesados por el sistema."
+      },
+      {
+        "tema": "Carga de trabajo en conciliación manual",
+        "decision": "accionable",
+        "justificacion": "Existe un patrón recurrente y creciente de emisores con más de 100 pagadores que dedican días enteros a la conciliación individual, afectando la retención y la escalabilidad del producto."
+      },
+      {
+        "tema": "Baja apertura del correo electrónico y preferencia por WhatsApp",
+        "decision": "accionable",
+        "justificacion": "Múltiples emisores reportan que los pagadores no abren el mail, lo que afecta directamente la tasa de respuesta y el cobro a tiempo."
+      },
+      {
+        "tema": "Solicitud de nuevas funcionalidades",
+        "decision": "ruido",
+        "justificacion": "Se trata de un conjunto heterogéneo de pedidos aislados (modo oscuro, cobranza en USD, descuentos, exportación a Excel) sin concentración en un patrón de problema único."
+      },
+      {
+        "tema": "Ausencia de alertas de cuotas impagas",
+        "decision": "accionable",
+        "justificacion": "Patrón persistente a lo largo de varios meses donde los emisores pierden visibilidad de cuotas vencidas y se enteran de la morosidad semanas o meses después."
+      },
+      {
+        "tema": "Elogio general",
+        "decision": "ruido",
+        "justificacion": "Mensajes de satisfacción general sobre el producto que no reflejan problemas ni oportunidades de medición técnica."
+      },
+      {
+        "tema": "Consulta de uso",
+        "decision": "ruido",
+        "justificacion": "Consultas puntuales de soporte operativo y dudas sobre la plataforma."
+      },
+      {
+        "tema": "Problemas de entregabilidad y correo no deseado",
+        "decision": "accionable",
+        "justificacion": "Mails de cobro que caen en spam o no son recibidos, impidiendo directamente que el pagador se entere y efectúe la respuesta."
+      }
+    ],
+    "evidencia_kpis_existentes": [
+      {
+        "clave": "DEMO-1",
+        "temas": [
+          "Baja apertura del correo electrónico y preferencia por WhatsApp",
+          "Problemas de entregabilidad y correo no deseado"
+        ],
+        "evidencia": [
+          "FB-3",
+          "FB-6",
+          "FB-11",
+          "FB-13",
+          "FB-18",
+          "FB-23",
+          "FB-35",
+          "FB-55",
+          "FB-75",
+          "FB-76",
+          "FB-106"
+        ],
+        "resumen": "Los problemas de entregabilidad (mails a spam) y la baja tasa de lectura del correo electrónico explican directamente bajas en la tasa de respuesta medida por DEMO-1. Sumar estas evidencias permite al equipo entender que la falta de respuesta no es necesariamente desinterés del pagador, sino fallas en la llegada y apertura del canal mail."
+      }
+    ],
+    "kpis_nuevos": [
+      {
+        "nombre": "Tasa de fallas en la detección de comprobantes por correo",
+        "definicion": "Porcentaje de respuestas de correo de pagadores con imagen o archivo adjunto que el sistema no logra identificar ni pasar al estado Pendiente de Revisión.",
+        "formula": "(Número de respuestas con comprobante no detectadas / Número total de respuestas con comprobante recibidas) * 100",
+        "fuente_datos": "Logs del motor de procesamiento de mails entrantes y servidor de correo.",
+        "baseline": "50% de fallas en la detección. Calculado a partir del reporte en FB-91 de un emisor que indica la pérdida de la mitad de los comprobantes tras v1.3; a medir analizando logs de correos entrantes no procesados.",
+        "objetivo": "Reducir la tasa de fallas a menos de 1% en un plazo de 15 días.",
+        "por_que_importa": "Es una regresión crítica de la versión v1.3 que genera fricción severa y falsos reclamos a pagadores que sí enviaron su comprobante.",
+        "temas": [
+          "Fallas en la recepción y detección de comprobantes"
+        ],
+        "evidencia": [
+          "FB-84",
+          "FB-85",
+          "FB-86",
+          "FB-87",
+          "FB-89",
+          "FB-90",
+          "FB-91",
+          "FB-92",
+          "FB-94",
+          "FB-95",
+          "FB-96",
+          "FB-97",
+          "FB-99",
+          "FB-101",
+          "FB-103",
+          "FB-105",
+          "FB-107",
+          "FB-108",
+          "FB-111",
+          "FB-115"
+        ],
+        "prioridad": 1,
+        "ya_propuesto": null
+      },
+      {
+        "nombre": "Tiempo promedio de conciliación por comprobante",
+        "definicion": "Tiempo en minutos transcurrido desde que un emisor abre un comprobante pendiente en la bandeja hasta que lo marca como Pagado o No Pagado.",
+        "formula": "Suma total de minutos dedicados a revisar comprobantes / Número total de comprobantes conciliados en el período",
+        "fuente_datos": "Telemetría de uso del panel de administración (eventos en la bandeja de comprobantes).",
+        "baseline": "3 a 6 minutos por comprobante. Calculado a partir de FB-24 (160 comprobantes llevan 16 horas, equivalente a 6 min/comprobante) y FB-7 (100 comprobantes en 4 horas, equivalente a 2.4 min/comprobante); a medir computando tiempo de sesión en bandeja.",
+        "objetivo": "Reducir el tiempo promedio a menos de 0.5 minutos (30 segundos) por comprobante en 60 días mediante herramientas de aprobación masiva.",
+        "por_que_importa": "Representa el principal cuello de botella operativo que frena la meta de negocio de escalar en cantidad de pagadores por emisor.",
+        "temas": [
+          "Carga de trabajo en conciliación manual"
+        ],
+        "evidencia": [
+          "FB-7",
+          "FB-17",
+          "FB-24",
+          "FB-36",
+          "FB-40",
+          "FB-49",
+          "FB-58",
+          "FB-73",
+          "FB-74",
+          "FB-77",
+          "FB-80",
+          "FB-93",
+          "FB-100",
+          "FB-109",
+          "FB-112",
+          "FB-116",
+          "FB-119"
+        ],
+        "prioridad": 2,
+        "ya_propuesto": null
+      },
+      {
+        "nombre": "Tiempo promedio de detección de cuotas impagas",
+        "definicion": "Días transcurridos desde que una cuota vence y entra en estado No Pagado hasta que el emisor visualiza o realiza alguna acción sobre esa cuota en el panel.",
+        "formula": "Suma de días entre la fecha de vencimiento de la cuota impaga y la primera vista/gestión del emisor / Número total de cuotas impagas",
+        "fuente_datos": "Base de datos de cuotas y registros de eventos de navegación en el panel.",
+        "baseline": "30 a 60 días de demora. Calculado a partir de FB-9, FB-21 y FB-52 donde los emisores reportan enterarse de cuotas no pagadas entre 1 y 2 meses después del vencimiento; a medir rastreando los timestamps de vencimiento y de visualización.",
+        "objetivo": "Reducir la demora de detección a menos de 1 día (24 horas) en 45 días implementando alertas automáticas de impagos.",
+        "por_que_importa": "Sin alertas, los emisores no pueden cumplir el objetivo de saber en todo momento quién pagó y quién no, provocando morosidad desapercibida.",
+        "temas": [
+          "Ausencia de alertas de cuotas impagas"
+        ],
+        "evidencia": [
+          "FB-9",
+          "FB-15",
+          "FB-21",
+          "FB-30",
+          "FB-43",
+          "FB-44",
+          "FB-52",
+          "FB-60",
+          "FB-71",
+          "FB-78",
+          "FB-82",
+          "FB-102",
+          "FB-110",
+          "FB-114",
+          "FB-120"
+        ],
+        "prioridad": 3,
+        "ya_propuesto": null
+      }
+    ]
+  }
+}
