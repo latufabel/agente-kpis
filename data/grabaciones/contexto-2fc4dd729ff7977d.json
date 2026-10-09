@@ -1,0 +1,61 @@
+{
+  "agente": "contexto",
+  "proveedor": "gemini",
+  "modelo": "gemini-3.5-flash",
+  "esfuerzo": "low",
+  "grabado": "2026-10-09T14:24:31.708Z",
+  "duracionMs": 7788,
+  "uso": {
+    "entrada": 1217,
+    "salida": 796
+  },
+  "salida": {
+    "nombre": "Cobros Recurrentes",
+    "problema": "Una persona o entidad chica necesita cobrarle a sus pagadores un monto recurrente y sin fecha de fin, pero actualmente lo hace con planillas y de forma manual, lo que genera desorden al perseguir pagos. La solución resuelve este problema sin exigirle al pagador la creación de una cuenta ni el manejo de datos sensibles de pago, basándose en la confianza mutua.",
+    "objetivos": [
+      "Para el emisor: cobrar a tiempo, con menos esfuerzo manual, y saber en todo momento quién pagó y quién no.",
+      "Para el pagador: enterarse a tiempo de lo que tiene que pagar y avisar que pagó sin fricción.",
+      "Para el negocio: que los emisores crezcan en cantidad de pagadores sin que el trabajo de cobrar crezca al mismo ritmo."
+    ],
+    "usuarios": [
+      {
+        "tipo": "Emisor",
+        "descripcion": "Es quien cobra y el único que accede al panel de administración. Configura pagadores y pagos, revisa comprobantes, concilia y da de baja pagos. Agrupa a particulares, profesionales independientes, clubes y pymes."
+      },
+      {
+        "tipo": "Pagador",
+        "descripcion": "Es quien paga. No tiene cuenta en el sistema; recibe pedidos de cobro por mail, paga por el medio preferido y responde adjuntando el comprobante."
+      }
+    ],
+    "flujo": "El emisor configura los pagos y el sistema genera cuotas automáticas en cada vencimiento enviando un pedido por mail. El pagador responde con el comprobante adjunto; si contiene un archivo, la cuota pasa a pendiente de revisión para que el emisor la apruebe o rechace manualmente desde el panel.",
+    "limitaciones": [
+      "El único canal disponible es el mail. WhatsApp está planificado pero no disponible.",
+      "No hay recordatorios automáticos al pagador antes ni después del vencimiento.",
+      "No hay alertas al emisor cuando una cuota queda en NO PAGADO.",
+      "La conciliación es 100% manual: el emisor abre y aprueba cada comprobante de a uno.",
+      "El sistema no lee el texto de los mensajes: la única señal es si la respuesta trae un archivo adjunto."
+    ],
+    "versiones": [
+      {
+        "version": "v1.0",
+        "fecha": "2026-06-15",
+        "cambios": "Lanzamiento: alta de pagadores y pagos, generación de cuotas, envío del pedido de cobro por mail, recepción de comprobantes y conciliación manual."
+      },
+      {
+        "version": "v1.1",
+        "fecha": "2026-07-20",
+        "cambios": "Filtros en la bandeja de comprobantes (por estado, pagador y fecha)."
+      },
+      {
+        "version": "v1.2",
+        "fecha": "2026-08-18",
+        "cambios": "Mensajes automáticos configurables: el emisor puede escribir el texto del pedido de cobro y de las respuestas automáticas."
+      },
+      {
+        "version": "v1.3",
+        "fecha": "2026-09-10",
+        "cambios": "Nuevo procesamiento de mails entrantes: mejora de rendimiento y de compatibilidad con respuestas enviadas desde el celular."
+      }
+    ]
+  }
+}

@@ -1,0 +1,698 @@
+{
+  "agente": "interprete",
+  "proveedor": "gemini",
+  "modelo": "gemini-3.5-flash",
+  "esfuerzo": "medium",
+  "grabado": "2026-10-09T14:25:36.238Z",
+  "duracionMs": 64525,
+  "uso": {
+    "entrada": 11389,
+    "salida": 5869
+  },
+  "salida": {
+    "temas": [
+      {
+        "tema": "Consulta de uso",
+        "descripcion": "Preguntas sobre el funcionamiento del sistema, resolución de dudas operativas o gestiones administrativas de cuenta."
+      },
+      {
+        "tema": "Elogio general",
+        "descripcion": "Comentarios positivos que destacan la practicidad, simplicidad y valor general del producto."
+      },
+      {
+        "tema": "Canal de cobro por WhatsApp",
+        "descripcion": "Solicitud de notificar o cobrar por WhatsApp debido al bajo nivel de lectura o apertura de los correos electrónicos."
+      },
+      {
+        "tema": "Problemas de entregabilidad de mails",
+        "descripcion": "Incidencias donde los correos de cobro enviados por la plataforma terminan en la bandeja de spam de los destinatarios."
+      },
+      {
+        "tema": "Ineficiencia de la conciliación manual",
+        "descripcion": "Quejas sobre la carga de trabajo y lentitud que implica revisar y aprobar de forma individual cada comprobante de pago."
+      },
+      {
+        "tema": "Exportación de datos de cobro",
+        "descripcion": "Solicitudes para descargar la información de cobros y estados de pago en formatos externos como Excel."
+      },
+      {
+        "tema": "Falta de alertas de pagos vencidos",
+        "descripcion": "Deseo de recibir notificaciones directas o resúmenes periódicos sobre cuotas impagas en lugar de tener que revisar el panel manualmente."
+      },
+      {
+        "tema": "Soporte para medios de pago adicionales",
+        "descripcion": "Pedidos para integrar plataformas de pago en línea como Mercado Pago o cobros directos con tarjeta de crédito."
+      },
+      {
+        "tema": "Soporte para múltiples monedas",
+        "descripcion": "Necesidad de configurar cobros y cuotas en monedas extranjeras, particularmente en dólares."
+      },
+      {
+        "tema": "Personalización de correos de cobro",
+        "descripcion": "Solicitudes de cambio en los contenidos, remitente, horarios de envío o branding de los correos automáticos."
+      },
+      {
+        "tema": "Configuración de múltiples tarifas",
+        "descripcion": "Necesidad de definir precios diferentes para el mismo concepto de cobro basado en segmentación o categorías de clientes."
+      },
+      {
+        "tema": "Configuración de recargos o descuentos",
+        "descripcion": "Funcionalidad solicitada para aplicar beneficios por pago anticipado o multas automáticas por retrasos."
+      },
+      {
+        "tema": "Gestión de estados de suscripción",
+        "descripcion": "Posibilidad de pausar transitoriamente el envío de cuotas para un cliente sin tener que eliminarlo del sistema."
+      },
+      {
+        "tema": "Acceso al panel desde dispositivos móviles",
+        "descripcion": "Deseo de contar con una aplicación nativa o web responsive optimizada para gestionar cobros desde el celular."
+      },
+      {
+        "tema": "Soporte para múltiples usuarios o roles",
+        "descripcion": "Permitir accesos independientes a varios administradores, facilitando el trabajo colaborativo en la conciliación."
+      },
+      {
+        "tema": "Emisión de recibos automáticos",
+        "descripcion": "Generación y envío automático de comprobantes de pago o facturas hacia los clientes una vez aprobado su pago."
+      },
+      {
+        "tema": "Visualización de historial de pagos",
+        "descripcion": "Pantallas o secciones consolidadas para observar todo el recorrido histórico y anual de pagos de un cliente específico."
+      },
+      {
+        "tema": "Error en recepción de comprobantes pegados",
+        "descripcion": "Fallo técnico (originado tras la v1.3) que impide detectar imágenes de comprobantes pegadas en el cuerpo del correo o enviadas desde celulares."
+      },
+      {
+        "tema": "Configuración de fechas de vencimiento",
+        "descripcion": "Flexibilidad para editar, mover o configurar las fechas en que se emiten y vencen las cuotas recurrentes."
+      },
+      {
+        "tema": "Mejoras de interfaz visual",
+        "descripcion": "Propuestas de mejoras estéticas o de visualización del panel, como la incorporación de un modo oscuro."
+      }
+    ],
+    "clasificaciones": [
+      {
+        "id": "FB-1",
+        "sentimiento": "Neutral",
+        "tema": "Consulta de uso"
+      },
+      {
+        "id": "FB-2",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general"
+      },
+      {
+        "id": "FB-3",
+        "sentimiento": "Negativo",
+        "tema": "Canal de cobro por WhatsApp"
+      },
+      {
+        "id": "FB-4",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general"
+      },
+      {
+        "id": "FB-5",
+        "sentimiento": "Positivo",
+        "tema": "Personalización de correos de cobro"
+      },
+      {
+        "id": "FB-6",
+        "sentimiento": "Negativo",
+        "tema": "Problemas de entregabilidad de mails"
+      },
+      {
+        "id": "FB-7",
+        "sentimiento": "Negativo",
+        "tema": "Ineficiencia de la conciliación manual"
+      },
+      {
+        "id": "FB-8",
+        "sentimiento": "Neutral",
+        "tema": "Exportación de datos de cobro"
+      },
+      {
+        "id": "FB-9",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas de pagos vencidos"
+      },
+      {
+        "id": "FB-10",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general"
+      },
+      {
+        "id": "FB-11",
+        "sentimiento": "Neutral",
+        "tema": "Canal de cobro por WhatsApp"
+      },
+      {
+        "id": "FB-12",
+        "sentimiento": "Neutral",
+        "tema": "Soporte para medios de pago adicionales"
+      },
+      {
+        "id": "FB-13",
+        "sentimiento": "Negativo",
+        "tema": "Canal de cobro por WhatsApp"
+      },
+      {
+        "id": "FB-14",
+        "sentimiento": "Neutral",
+        "tema": "Soporte para múltiples monedas"
+      },
+      {
+        "id": "FB-15",
+        "sentimiento": "Neutral",
+        "tema": "Falta de alertas de pagos vencidos"
+      },
+      {
+        "id": "FB-16",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general"
+      },
+      {
+        "id": "FB-17",
+        "sentimiento": "Neutral",
+        "tema": "Ineficiencia de la conciliación manual"
+      },
+      {
+        "id": "FB-18",
+        "sentimiento": "Negativo",
+        "tema": "Canal de cobro por WhatsApp"
+      },
+      {
+        "id": "FB-19",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general"
+      },
+      {
+        "id": "FB-20",
+        "sentimiento": "Neutral",
+        "tema": "Mejoras de interfaz visual"
+      },
+      {
+        "id": "FB-21",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas de pagos vencidos"
+      },
+      {
+        "id": "FB-22",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general"
+      },
+      {
+        "id": "FB-23",
+        "sentimiento": "Negativo",
+        "tema": "Canal de cobro por WhatsApp"
+      },
+      {
+        "id": "FB-24",
+        "sentimiento": "Negativo",
+        "tema": "Ineficiencia de la conciliación manual"
+      },
+      {
+        "id": "FB-25",
+        "sentimiento": "Neutral",
+        "tema": "Consulta de uso"
+      },
+      {
+        "id": "FB-26",
+        "sentimiento": "Neutral",
+        "tema": "Personalización de correos de cobro"
+      },
+      {
+        "id": "FB-28",
+        "sentimiento": "Neutral",
+        "tema": "Configuración de múltiples tarifas"
+      },
+      {
+        "id": "FB-27",
+        "sentimiento": "Negativo",
+        "tema": "Canal de cobro por WhatsApp"
+      },
+      {
+        "id": "FB-30",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas de pagos vencidos"
+      },
+      {
+        "id": "FB-29",
+        "sentimiento": "Neutral",
+        "tema": "Consulta de uso"
+      },
+      {
+        "id": "FB-32",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general"
+      },
+      {
+        "id": "FB-31",
+        "sentimiento": "Neutral",
+        "tema": "Canal de cobro por WhatsApp"
+      },
+      {
+        "id": "FB-34",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general"
+      },
+      {
+        "id": "FB-35",
+        "sentimiento": "Negativo",
+        "tema": "Canal de cobro por WhatsApp"
+      },
+      {
+        "id": "FB-33",
+        "sentimiento": "Neutral",
+        "tema": "Consulta de uso"
+      },
+      {
+        "id": "FB-36",
+        "sentimiento": "Negativo",
+        "tema": "Ineficiencia de la conciliación manual"
+      },
+      {
+        "id": "FB-37",
+        "sentimiento": "Negativo",
+        "tema": "Canal de cobro por WhatsApp"
+      },
+      {
+        "id": "FB-38",
+        "sentimiento": "Negativo",
+        "tema": "Canal de cobro por WhatsApp"
+      },
+      {
+        "id": "FB-39",
+        "sentimiento": "Neutral",
+        "tema": "Configuración de recargos o descuentos"
+      },
+      {
+        "id": "FB-40",
+        "sentimiento": "Negativo",
+        "tema": "Ineficiencia de la conciliación manual"
+      },
+      {
+        "id": "FB-41",
+        "sentimiento": "Neutral",
+        "tema": "Consulta de uso"
+      },
+      {
+        "id": "FB-42",
+        "sentimiento": "Negativo",
+        "tema": "Canal de cobro por WhatsApp"
+      },
+      {
+        "id": "FB-43",
+        "sentimiento": "Neutral",
+        "tema": "Falta de alertas de pagos vencidos"
+      },
+      {
+        "id": "FB-44",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas de pagos vencidos"
+      },
+      {
+        "id": "FB-45",
+        "sentimiento": "Neutral",
+        "tema": "Gestión de estados de suscripción"
+      },
+      {
+        "id": "FB-46",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general"
+      },
+      {
+        "id": "FB-47",
+        "sentimiento": "Negativo",
+        "tema": "Canal de cobro por WhatsApp"
+      },
+      {
+        "id": "FB-48",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general"
+      },
+      {
+        "id": "FB-49",
+        "sentimiento": "Negativo",
+        "tema": "Ineficiencia de la conciliación manual"
+      },
+      {
+        "id": "FB-50",
+        "sentimiento": "Neutral",
+        "tema": "Consulta de uso"
+      },
+      {
+        "id": "FB-51",
+        "sentimiento": "Neutral",
+        "tema": "Acceso al panel desde dispositivos móviles"
+      },
+      {
+        "id": "FB-52",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas de pagos vencidos"
+      },
+      {
+        "id": "FB-53",
+        "sentimiento": "Neutral",
+        "tema": "Ineficiencia de la conciliación manual"
+      },
+      {
+        "id": "FB-54",
+        "sentimiento": "Positivo",
+        "tema": "Personalización de correos de cobro"
+      },
+      {
+        "id": "FB-55",
+        "sentimiento": "Negativo",
+        "tema": "Problemas de entregabilidad de mails"
+      },
+      {
+        "id": "FB-56",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general"
+      },
+      {
+        "id": "FB-57",
+        "sentimiento": "Neutral",
+        "tema": "Soporte para medios de pago adicionales"
+      },
+      {
+        "id": "FB-58",
+        "sentimiento": "Negativo",
+        "tema": "Ineficiencia de la conciliación manual"
+      },
+      {
+        "id": "FB-59",
+        "sentimiento": "Neutral",
+        "tema": "Canal de cobro por WhatsApp"
+      },
+      {
+        "id": "FB-60",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas de pagos vencidos"
+      },
+      {
+        "id": "FB-62",
+        "sentimiento": "Negativo",
+        "tema": "Ineficiencia de la conciliación manual"
+      },
+      {
+        "id": "FB-61",
+        "sentimiento": "Neutral",
+        "tema": "Consulta de uso"
+      },
+      {
+        "id": "FB-63",
+        "sentimiento": "Neutral",
+        "tema": "Soporte para múltiples usuarios o roles"
+      },
+      {
+        "id": "FB-64",
+        "sentimiento": "Negativo",
+        "tema": "Canal de cobro por WhatsApp"
+      },
+      {
+        "id": "FB-65",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general"
+      },
+      {
+        "id": "FB-66",
+        "sentimiento": "Neutral",
+        "tema": "Consulta de uso"
+      },
+      {
+        "id": "FB-67",
+        "sentimiento": "Neutral",
+        "tema": "Emisión de recibos automáticos"
+      },
+      {
+        "id": "FB-69",
+        "sentimiento": "Neutral",
+        "tema": "Personalización de correos de cobro"
+      },
+      {
+        "id": "FB-68",
+        "sentimiento": "Negativo",
+        "tema": "Canal de cobro por WhatsApp"
+      },
+      {
+        "id": "FB-73",
+        "sentimiento": "Negativo",
+        "tema": "Ineficiencia de la conciliación manual"
+      },
+      {
+        "id": "FB-71",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas de pagos vencidos"
+      },
+      {
+        "id": "FB-70",
+        "sentimiento": "Neutral",
+        "tema": "Personalización de correos de cobro"
+      },
+      {
+        "id": "FB-72",
+        "sentimiento": "Neutral",
+        "tema": "Visualización de historial de pagos"
+      },
+      {
+        "id": "FB-75",
+        "sentimiento": "Negativo",
+        "tema": "Canal de cobro por WhatsApp"
+      },
+      {
+        "id": "FB-74",
+        "sentimiento": "Negativo",
+        "tema": "Ineficiencia de la conciliación manual"
+      },
+      {
+        "id": "FB-76",
+        "sentimiento": "Negativo",
+        "tema": "Problemas de entregabilidad de mails"
+      },
+      {
+        "id": "FB-77",
+        "sentimiento": "Negativo",
+        "tema": "Ineficiencia de la conciliación manual"
+      },
+      {
+        "id": "FB-78",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas de pagos vencidos"
+      },
+      {
+        "id": "FB-79",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general"
+      },
+      {
+        "id": "FB-80",
+        "sentimiento": "Negativo",
+        "tema": "Ineficiencia de la conciliación manual"
+      },
+      {
+        "id": "FB-81",
+        "sentimiento": "Neutral",
+        "tema": "Canal de cobro por WhatsApp"
+      },
+      {
+        "id": "FB-82",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas de pagos vencidos"
+      },
+      {
+        "id": "FB-83",
+        "sentimiento": "Neutral",
+        "tema": "Consulta de uso"
+      },
+      {
+        "id": "FB-85",
+        "sentimiento": "Negativo",
+        "tema": "Error en recepción de comprobantes pegados"
+      },
+      {
+        "id": "FB-84",
+        "sentimiento": "Negativo",
+        "tema": "Error en recepción de comprobantes pegados"
+      },
+      {
+        "id": "FB-87",
+        "sentimiento": "Negativo",
+        "tema": "Error en recepción de comprobantes pegados"
+      },
+      {
+        "id": "FB-86",
+        "sentimiento": "Negativo",
+        "tema": "Error en recepción de comprobantes pegados"
+      },
+      {
+        "id": "FB-88",
+        "sentimiento": "Negativo",
+        "tema": "Canal de cobro por WhatsApp"
+      },
+      {
+        "id": "FB-90",
+        "sentimiento": "Negativo",
+        "tema": "Error en recepción de comprobantes pegados"
+      },
+      {
+        "id": "FB-89",
+        "sentimiento": "Negativo",
+        "tema": "Error en recepción de comprobantes pegados"
+      },
+      {
+        "id": "FB-92",
+        "sentimiento": "Negativo",
+        "tema": "Error en recepción de comprobantes pegados"
+      },
+      {
+        "id": "FB-93",
+        "sentimiento": "Negativo",
+        "tema": "Ineficiencia de la conciliación manual"
+      },
+      {
+        "id": "FB-91",
+        "sentimiento": "Negativo",
+        "tema": "Error en recepción de comprobantes pegados"
+      },
+      {
+        "id": "FB-95",
+        "sentimiento": "Negativo",
+        "tema": "Error en recepción de comprobantes pegados"
+      },
+      {
+        "id": "FB-94",
+        "sentimiento": "Negativo",
+        "tema": "Error en recepción de comprobantes pegados"
+      },
+      {
+        "id": "FB-98",
+        "sentimiento": "Negativo",
+        "tema": "Error en recepción de comprobantes pegados"
+      },
+      {
+        "id": "FB-96",
+        "sentimiento": "Negativo",
+        "tema": "Error en recepción de comprobantes pegados"
+      },
+      {
+        "id": "FB-97",
+        "sentimiento": "Negativo",
+        "tema": "Error en recepción de comprobantes pegados"
+      },
+      {
+        "id": "FB-100",
+        "sentimiento": "Negativo",
+        "tema": "Ineficiencia de la conciliación manual"
+      },
+      {
+        "id": "FB-99",
+        "sentimiento": "Negativo",
+        "tema": "Error en recepción de comprobantes pegados"
+      },
+      {
+        "id": "FB-101",
+        "sentimiento": "Negativo",
+        "tema": "Error en recepción de comprobantes pegados"
+      },
+      {
+        "id": "FB-102",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas de pagos vencidos"
+      },
+      {
+        "id": "FB-104",
+        "sentimiento": "Neutral",
+        "tema": "Configuración de fechas de vencimiento"
+      },
+      {
+        "id": "FB-103",
+        "sentimiento": "Negativo",
+        "tema": "Error en recepción de comprobantes pegados"
+      },
+      {
+        "id": "FB-106",
+        "sentimiento": "Negativo",
+        "tema": "Canal de cobro por WhatsApp"
+      },
+      {
+        "id": "FB-105",
+        "sentimiento": "Negativo",
+        "tema": "Error en recepción de comprobantes pegados"
+      },
+      {
+        "id": "FB-107",
+        "sentimiento": "Negativo",
+        "tema": "Error en recepción de comprobantes pegados"
+      },
+      {
+        "id": "FB-109",
+        "sentimiento": "Negativo",
+        "tema": "Ineficiencia de la conciliación manual"
+      },
+      {
+        "id": "FB-108",
+        "sentimiento": "Negativo",
+        "tema": "Error en recepción de comprobantes pegados"
+      },
+      {
+        "id": "FB-110",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas de pagos vencidos"
+      },
+      {
+        "id": "FB-111",
+        "sentimiento": "Negativo",
+        "tema": "Error en recepción de comprobantes pegados"
+      },
+      {
+        "id": "FB-112",
+        "sentimiento": "Negativo",
+        "tema": "Ineficiencia de la conciliación manual"
+      },
+      {
+        "id": "FB-113",
+        "sentimiento": "Positivo",
+        "tema": "Canal de cobro por WhatsApp"
+      },
+      {
+        "id": "FB-114",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas de pagos vencidos"
+      },
+      {
+        "id": "FB-116",
+        "sentimiento": "Neutral",
+        "tema": "Soporte para múltiples usuarios o roles"
+      },
+      {
+        "id": "FB-115",
+        "sentimiento": "Negativo",
+        "tema": "Error en recepción de comprobantes pegados"
+      },
+      {
+        "id": "FB-117",
+        "sentimiento": "Neutral",
+        "tema": "Consulta de uso"
+      },
+      {
+        "id": "FB-118",
+        "sentimiento": "Negativo",
+        "tema": "Canal de cobro por WhatsApp"
+      },
+      {
+        "id": "FB-119",
+        "sentimiento": "Negativo",
+        "tema": "Ineficiencia de la conciliación manual"
+      },
+      {
+        "id": "FB-120",
+        "sentimiento": "Neutral",
+        "tema": "Falta de alertas de pagos vencidos"
+      }
+    ]
+  }
+}
