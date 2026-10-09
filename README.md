@@ -197,7 +197,7 @@ npm start -- --producto cobros-recurrentes --publicar   # además crea los ticke
 
 ### 3. Automático (GitHub Actions)
 
-- [`agente-kpis.yml`](.github/workflows/agente-kpis.yml): días hábiles a las 15:00 (Argentina) corre todos los productos de `config/productos/` y publica. También se puede disparar a mano eligiendo producto y si publica.
+- [`agente-kpis.yml`](.github/workflows/agente-kpis.yml): días hábiles a las 08:00 y a las 15:00 (Argentina) corre todos los productos de `config/productos/` y publica. También se puede disparar a mano eligiendo producto y si publica.
 - [`ci.yml`](.github/workflows/ci.yml): en cada push corre typecheck, la demo y la evaluación.
 
 Secrets del repositorio: la clave del modelo (`GEMINI_API_KEY`, `OPENROUTER_API_KEY` o `ANTHROPIC_API_KEY`), `NOTION_TOKEN`, `JIRA_EMAIL`, `JIRA_API_TOKEN` y `JIRA_BASE_URL`. Opcional: `AGENTE_PROVEEDOR` (`gemini`, `openrouter` o `anthropic`).
