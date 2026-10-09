@@ -6,7 +6,10 @@ import { marcarFeedbackProcesado } from "../fuentes/notion.ts";
 import type { ResultadoCorrida } from "../pipeline.ts";
 import type { ConfigProducto } from "../tipos.ts";
 
-const normalizar = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+/** El modelo a veces ya incluye "[P1][CRITICA]" o "[Mejora P1]" en el título: no repetirlo. */
+const sinPrefijo = (titulo: string) => titulo.replace(/^(\s*\[[^\]]*\]\s*)+/, "");
+
+const normalizar =(s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
 
 export async function publicar(config: ConfigProducto, r: ResultadoCorrida): Promise<void> {
   const claveKpi = new Map<string, string>();
@@ -15,14 +18,14 @@ export async function publicar(config: ConfigProducto, r: ResultadoCorrida): Pro
     claveKpi.set(normalizar(k.clave), k.clave);
   }
 
-  console.log("\n⑦ Publicando en Jira");
+  console.log("\n▶ Publicando en Jira");
   for (const k of r.analista.kpis_nuevos) {
     const clave = await crearTicket(config, {
       tipo: config.jira.tipoKpi,
       resumen: resumenKpi(k.nombre),
       etiquetas: [ETIQUETA_KPI, k.ya_propuesto ? "ya-propuesto" : `prioridad-${k.prioridad}`],
       descripcion: adf.doc(
-        adf.parrafo("KPI propuesto por Agente KPIs. Aprobalo moviéndolo a «Por hacer» o descartalo."),
+        adf.parrafo("KPI propuesto por Agente KPIs. Aprobalo moviéndolo a «Aprobado», pasalo a «En evaluación/reformulación» o descartalo."),
         k.ya_propuesto
           ? adf.parrafo(
               `Ya se había propuesto y se descartó (${k.ya_propuesto}). La evidencia actual lo vuelve a justificar; queda con baja prioridad para que lo reconsideres.`,
@@ -79,7 +82,7 @@ export async function publicar(config: ConfigProducto, r: ResultadoCorrida): Pro
     const padre = a.kpis_relacionados.map((n) => claveKpi.get(normalizar(n))).find(Boolean);
     const ticket = {
       tipo: config.jira.tipoAlerta,
-      resumen: `[P${a.prioridad}][${a.severidad.toUpperCase()}] ${a.titulo}`,
+      resumen: `[P${a.prioridad}][${a.severidad.toUpperCase()}] ${sinPrefijo(a.titulo)}`,
       etiquetas: [ETIQUETA_ALERTA, `severidad-${a.severidad}`],
       descripcion: adf.doc(adf.parrafo("Alerta de desvío detectada por Agente KPIs."), ...cuerpo),
     };
@@ -98,7 +101,7 @@ export async function publicar(config: ConfigProducto, r: ResultadoCorrida): Pro
     const padre = claveKpi.get(normalizar(m.kpi));
     const ticket = {
       tipo: config.jira.tipoAlerta,
-      resumen: `[Mejora P${m.prioridad}] ${m.titulo}`,
+      resumen: `[Mejora P${m.prioridad}] ${sinPrefijo(m.titulo)}`,
       etiquetas: [ETIQUETA_MEJORA, `esfuerzo-${m.esfuerzo}`],
       descripcion: adf.doc(
         adf.parrafo("Mejora sugerida por Agente KPIs. Aprobala moviéndola a «Aprobado» o descartala."),
@@ -122,7 +125,7 @@ export async function publicar(config: ConfigProducto, r: ResultadoCorrida): Pro
     console.log(`   + ${clave}  ${ticket.resumen}${padre ? `  (hija de ${padre})` : ""}`);
   }
 
-  console.log("\n⑧ Completando campos (agente) en Notion");
+  console.log("\n▶ Completando campos (agente) en Notion");
   const porId = new Map(r.feedback.map((f) => [f.id, f]));
   const claseDe = new Map(r.clasificaciones.map((c) => [c.id, c]));
   let n = 0;
