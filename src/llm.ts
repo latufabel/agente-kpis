@@ -1,5 +1,5 @@
-// Cliente LLM compartido por todos los agentes. Soporta Claude (Anthropic) y
-// Gemini (Google); se elige con AGENTE_PROVEEDOR o, si no está, según qué API
+// Cliente LLM compartido por todos los agentes. Soporta Claude (Anthropic),
+// Gemini (Google) y OpenRouter (modelos gratuitos y de terceros); se elige con AGENTE_PROVEEDOR o, si no está, según qué API
 // key haya en el entorno.
 //
 // Cada agente es una llamada con salida estructurada (esquema Zod). Las
@@ -21,29 +21,34 @@ export function usarGrabaciones(modo: "demo" | "conectado"): void {
   dirGrabaciones = `data/grabaciones/${modo}`;
 }
 
-type Proveedor = "anthropic" | "gemini";
+type Proveedor = "anthropic" | "gemini" | "openrouter";
 type Esfuerzo = "low" | "medium" | "high" | "xhigh" | "max";
 
 const MODELO_POR_DEFECTO: Record<Proveedor, string> = {
   anthropic: "claude-opus-5-5",
   gemini: "gemini-3.5-flash",
+  openrouter: "nvidia/nemotron-3-super-120b-a12b:free",
 };
 const API_KEY: Record<Proveedor, string> = {
   anthropic: "ANTHROPIC_API_KEY",
   gemini: "GEMINI_API_KEY",
+  openrouter: "OPENROUTER_API_KEY",
 };
 
 // Se leen en tiempo de ejecución (no al importar) porque .env se carga en index.ts.
 export function proveedor(): Proveedor {
   const elegido = process.env.AGENTE_PROVEEDOR?.toLowerCase();
-  if (elegido === "anthropic" || elegido === "gemini") return elegido;
+  if (elegido === "anthropic" || elegido === "gemini" || elegido === "openrouter") return elegido;
   if (process.env.ANTHROPIC_API_KEY) return "anthropic";
   if (process.env.GEMINI_API_KEY) return "gemini";
+  if (process.env.OPENROUTER_API_KEY) return "openrouter";
   return "anthropic";
 }
 
-export function modelo(): string {
-  return process.env.AGENTE_MODELO || MODELO_POR_DEFECTO[proveedor()];
+/** Modelo para un agente: AGENTE_MODELO_<AGENTE> (p. ej. AGENTE_MODELO_ANALISTA) > AGENTE_MODELO > por defecto. */
+export function modelo(agente?: string): string {
+  const propio = agente ? process.env[`AGENTE_MODELO_${agente.toUpperCase()}`] : undefined;
+  return propio || process.env.AGENTE_MODELO || MODELO_POR_DEFECTO[proveedor()];
 }
 
 export function modoLlm(): "vivo" | "reproducir" {
@@ -69,7 +74,7 @@ interface Respuesta {
 export async function llamarAgente<S extends z.ZodType>(llamada: LlamadaAgente<S>): Promise<z.infer<S>> {
   const { agente, sistema, entrada, esquema, esfuerzo = "medium" } = llamada;
   const prov = proveedor();
-  const mod = modelo();
+  const mod = modelo(agente);
   const huella = createHash("sha256")
     // Solo depende de la entrada: una grabación se reproduce aunque cambie el proveedor.
     .update(JSON.stringify({ agente, sistema, entrada, esfuerzo }))
@@ -77,10 +82,11 @@ export async function llamarAgente<S extends z.ZodType>(llamada: LlamadaAgente<S
     .slice(0, 16);
   const archivo = path.join(dirGrabaciones, `${agente}-${huella}.json`);
 
-  // Misma entrada que una corrida anterior → misma respuesta. Así lo que se
-  // revisa en una corrida sin --publicar es exactamente lo que se publica después.
-  if (existsSync(archivo) && process.env.AGENTE_CACHE !== "no") {
-    return esquema.parse(JSON.parse(readFileSync(archivo, "utf8")).salida);
+  // Misma entrada y mismo modelo que una corrida anterior → misma respuesta. Así lo
+  // que se revisa en una corrida sin --publicar es exactamente lo que se publica después.
+  if (modoLlm() === "vivo" && existsSync(archivo) && process.env.AGENTE_CACHE !== "no") {
+    const previa = JSON.parse(readFileSync(archivo, "utf8"));
+    if (previa.proveedor === prov && previa.modeloPedido === mod) return esquema.parse(previa.salida);
   }
 
   if (modoLlm() === "reproducir") {
@@ -96,7 +102,11 @@ export async function llamarAgente<S extends z.ZodType>(llamada: LlamadaAgente<S
 
   const inicio = Date.now();
   const r = await conReintentos(agente, () =>
-    prov === "gemini" ? llamarGemini(mod, llamada) : llamarClaude(mod, llamada),
+    prov === "gemini"
+      ? llamarGemini(mod, llamada)
+      : prov === "openrouter"
+        ? llamarOpenRouter(mod, llamada)
+        : llamarClaude(mod, llamada),
   );
   const salida = esquema.parse(r.salida);
 
@@ -107,6 +117,7 @@ export async function llamarAgente<S extends z.ZodType>(llamada: LlamadaAgente<S
       {
         agente,
         proveedor: prov,
+        modeloPedido: mod,
         modelo: r.modelo,
         esfuerzo,
         grabado: new Date().toISOString(),
@@ -219,5 +230,46 @@ async function llamarGemini<S extends z.ZodType>(mod: string, ll: LlamadaAgente<
     salida: JSON.parse(r.text),
     modelo: r.modelVersion ?? mod,
     uso: { entrada: r.usageMetadata?.promptTokenCount ?? 0, salida: r.usageMetadata?.candidatesTokenCount ?? 0 },
+  };
+}
+
+// --- OpenRouter (API compatible con OpenAI) ---
+
+async function llamarOpenRouter<S extends z.ZodType>(mod: string, ll: LlamadaAgente<S>): Promise<Respuesta> {
+  const { $schema, ...esquemaJson } = limpiarEsquema(z.toJSONSchema(ll.esquema)) as Record<string, unknown>;
+  const r = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+      "Content-Type": "application/json",
+      "X-Title": "Agente KPIs",
+    },
+    body: JSON.stringify({
+      model: mod,
+      max_tokens: ll.maxTokens ?? 32000,
+      messages: [
+        { role: "system", content: ll.sistema },
+        { role: "user", content: ll.entrada },
+      ],
+      response_format: { type: "json_schema", json_schema: { name: ll.agente, strict: true, schema: esquemaJson } },
+    }),
+  });
+  const cuerpo: any = await r.json().catch(() => ({}));
+  if (!r.ok || cuerpo.error) {
+    const status = cuerpo.error?.code ?? r.status;
+    throw Object.assign(new Error(`OpenRouter ${status}: ${cuerpo.error?.message ?? r.statusText}`), {
+      status: typeof status === "number" ? status : r.status,
+    });
+  }
+  const eleccion = cuerpo.choices?.[0];
+  if (eleccion?.finish_reason === "length") throw new Error(`El agente "${ll.agente}" se quedó sin tokens de salida.`);
+  const texto: string = eleccion?.message?.content ?? "";
+  if (!texto) throw new Error(`El agente "${ll.agente}" no devolvió texto.`);
+  // Algunos modelos envuelven el JSON en un bloque de código.
+  const json = texto.replace(/^s*```(?:json)?s*/i, "").replace(/s*```s*$/, "");
+  return {
+    salida: JSON.parse(json),
+    modelo: cuerpo.model ?? mod,
+    uso: { entrada: cuerpo.usage?.prompt_tokens ?? 0, salida: cuerpo.usage?.completion_tokens ?? 0 },
   };
 }

@@ -53,7 +53,8 @@ Recibís el contexto del producto, los KPIs que YA existen en Jira y los temas d
 Tu trabajo:
 1. Decidí para cada tema si es "accionable" (un patrón real que merece medirse: varios feedbacks, impacto en los objetivos del producto) o "ruido" (consultas sueltas, elogios generales, pedidos aislados).
 2. Para cada tema accionable, revisá primero los KPIs existentes. Si un KPI existente ya mide ese problema, sumale la evidencia en "evidencia_kpis_existentes" y NO propongas un KPI duplicado. Solo proponé KPIs nuevos para aspectos que ningún KPI existente cubre.
-3. Cada KPI nuevo tiene que ser medible: definición precisa, fórmula, fuente del dato, baseline (usá números concretos que aparezcan en el feedback cuando existan, citando el FB; si no hay, explicá cómo tomarlo) y un objetivo con plazo.
+3. Cada KPI nuevo tiene que ser medible: definición precisa, fórmula, fuente del dato, baseline y un objetivo con plazo.
+   El baseline es SIEMPRE un número o un rango numérico, nunca un adjetivo como "alto" o "bajo". Usá los números que aparezcan en el feedback citando el FB; si no hay uno exacto, estimalo a partir de la evidencia (por ejemplo, días de demora que cuentan los clientes, o la proporción de feedbacks afectados), explicá el cálculo en una oración e indicá cómo medirlo con precisión.
 4. Citá evidencia con los IDs FB-n exactos de los temas correspondientes.
 5. Priorizá: 1 = lo más urgente (problemas nuevos o regresiones que afectan a muchos usuarios van primero).
 6. KPIs descartados: el PM los descartó en algún momento, pero el negocio cambia. No los ignores: si la evidencia actual vuelve a justificar medir lo mismo, proponelo igual y poné en "ya_propuesto" la clave del KPI descartado (va a quedar con baja prioridad para que el PM lo reconsidere). No uses los descartados para sumar evidencia.

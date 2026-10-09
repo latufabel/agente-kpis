@@ -38,7 +38,10 @@ Para cada feedback decidís el sentimiento y el TEMA.
 
 Cómo definir temas:
 - Un tema es el problema o la necesidad DE FONDO (la causa), no el síntoma. Dos quejas que se parecen en la superficie pero tienen causas distintas van en temas distintos. Usá el contexto del producto (cómo funciona, limitaciones conocidas, historial de versiones) para distinguir causas.
+- Cuando el usuario pide una solución (una funcionalidad, un canal o una integración nueva), preguntate qué problema le resolvería y nombrá el tema por ese problema, no por la solución pedida.
 - Agrupá: un tema tiene que poder juntar varios feedbacks. Evitá temas de un solo caso salvo que de verdad no encaje en ningún otro.
+- No partas un mismo problema en variantes (por dispositivo, por segmento, "general" vs. "específico", distintas formas de pedir lo mismo): es un solo tema. Como referencia, 100 feedbacks suelen agruparse en 6 a 15 temas.
+- Si un problema aparece de golpe después de una versión, no lo mezcles con quejas anteriores parecidas que tienen otra causa.
 - Los feedbacks puntuales que no describen un problema del producto (consultas de uso, saludos, elogios generales, pedidos aislados) van a temas genéricos como "Consulta de uso" o "Elogio general". No los fuerces dentro de un tema de problema.
 - Si te paso temas existentes, reutilizá el nombre EXACTO cuando corresponda. Creá un tema nuevo solo si ninguno encaja.
 - Nombres de tema: en español, cortos (máximo 8 palabras), específicos.

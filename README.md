@@ -132,7 +132,19 @@ flowchart LR
 - **Jira es la fuente de verdad.** Antes de proponer, el agente lee los KPIs del producto (incluidos los descartados) para no duplicar.
 - **Idempotente.** El feedback procesado se marca en Notion; una segunda corrida sin feedback nuevo no hace nada. Las alertas abiertas se actualizan con un comentario en vez de duplicarse.
 - **Revisar antes de publicar.** Sin `--publicar` solo se genera el reporte. Las respuestas del modelo se cachean por entrada, así que lo que se revisó es exactamente lo que se publica.
-- **Agnóstico de producto y de proveedor.** Sumar un producto es sumar un archivo en `config/productos/`. El modelo puede ser Claude (Anthropic) o Gemini (Google), y se cambia con una variable.
+- **Agnóstico de producto y de proveedor.** Sumar un producto es sumar un archivo en `config/productos/`. El modelo puede ser Gemini (Google), Claude (Anthropic) o cualquiera de OpenRouter, incluso uno distinto por agente, y se cambia con variables.
+- **El modelo se elige midiendo.** Cada combinación se corrió contra la evaluación (ver [Modelos](#modelos)).
+
+### Modelos
+
+| Configuración (los 4 agentes) | Evaluación |
+|---|---|
+| **Gemini 3.5 Flash** (por defecto; es la que usa la demo grabada) | **20/20** |
+| OpenRouter gratuito: Intérprete `dots-3-note`, Analista `dots-3-note`, Detector `nemotron-3-super` | 16/20 |
+| OpenRouter gratuito: Intérprete `nemotron-3-super`, Analista `dots-3-note`, Detector `nemotron-3-super` | 13/20 |
+| OpenRouter gratuito: Intérprete `dots-3-note`, Analista y Detector `nemotron-3-super` | 12/20 |
+
+Aprendizaje: los modelos gratuitos de OpenRouter agrupan bien los temas (el Intérprete con `dots-3-note` detectó las cuatro formas y atribuyó la regresión a v1.3), pero se quedan cortos en el paso que más razona, el **Analista**: no suman evidencia al KPI existente y separan peor el ruido. Por eso Gemini es el proveedor por defecto y OpenRouter queda como alternativa.
 
 ---
 
@@ -155,7 +167,7 @@ npm run evaluar    # compara el resultado con las respuestas esperadas
 
 La demo usa los datos de [`data/fixtures/`](data/fixtures/) y, si no hay API key, **reproduce las respuestas grabadas de una corrida real** ([`data/grabaciones/demo/`](data/grabaciones/demo/)). Nunca escribe en Jira ni en Notion. El reporte queda en `salida/cobros-recurrentes/reporte.md`.
 
-Para correr la demo **en vivo** con un modelo, copiá `.env.example` a `.env` y completá una sola clave: `GEMINI_API_KEY` (gratuita en [Google AI Studio](https://aistudio.google.com/apikey)) o `ANTHROPIC_API_KEY`. Una corrida tarda unos 2 o 3 minutos.
+Para correr la demo **en vivo** con un modelo, copiá `.env.example` a `.env` y completá una sola clave: `GEMINI_API_KEY` (gratuita en [Google AI Studio](https://aistudio.google.com/apikey)), `OPENROUTER_API_KEY` ([OpenRouter](https://openrouter.ai/keys), con modelos gratuitos `:free`) o `ANTHROPIC_API_KEY`. Elegí el proveedor con `AGENTE_PROVEEDOR` y, si querés, un modelo por agente con `AGENTE_MODELO_CONTEXTO`, `AGENTE_MODELO_INTERPRETE`, `AGENTE_MODELO_ANALISTA` y `AGENTE_MODELO_DESVIOS`. Una corrida tarda entre 2 y 5 minutos; los planes gratuitos tienen límites diarios (el agente reintenta solo ante saturación).
 
 ### 2. Conectado a Notion y Jira
 
@@ -171,7 +183,7 @@ npm start -- --producto cobros-recurrentes --publicar   # además crea los ticke
 - [`agente-kpis.yml`](.github/workflows/agente-kpis.yml): días hábiles a las 08:00 (Argentina) corre todos los productos de `config/productos/` y publica. También se puede disparar a mano eligiendo producto y si publica.
 - [`ci.yml`](.github/workflows/ci.yml): en cada push corre typecheck, la demo y la evaluación.
 
-Secrets del repositorio: `GEMINI_API_KEY` o `ANTHROPIC_API_KEY`, `NOTION_TOKEN`, `JIRA_EMAIL`, `JIRA_API_TOKEN` y `JIRA_BASE_URL`. Opcional: `AGENTE_PROVEEDOR` (`gemini` o `anthropic`).
+Secrets del repositorio: la clave del modelo (`GEMINI_API_KEY`, `OPENROUTER_API_KEY` o `ANTHROPIC_API_KEY`), `NOTION_TOKEN`, `JIRA_EMAIL`, `JIRA_API_TOKEN` y `JIRA_BASE_URL`. Opcional: `AGENTE_PROVEEDOR` (`gemini`, `openrouter` o `anthropic`).
 
 ---
 
@@ -195,7 +207,7 @@ src/agentes/             los cuatro agentes
 src/analitica/           métricas determinísticas
 src/fuentes/             Notion, Jira y fixtures
 src/salidas/             reporte local y publicación
-src/llm.ts               cliente del modelo (Claude o Gemini), salida estructurada, grabaciones y reintentos
+src/llm.ts               cliente del modelo (Gemini, Claude u OpenRouter), salida estructurada, grabaciones, caché y reintentos
 src/pipeline.ts          orquestador
 ```
 
