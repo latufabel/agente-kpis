@@ -77,6 +77,12 @@ export async function llamarAgente<S extends z.ZodType>(llamada: LlamadaAgente<S
     .slice(0, 16);
   const archivo = path.join(dirGrabaciones, `${agente}-${huella}.json`);
 
+  // Misma entrada que una corrida anterior → misma respuesta. Así lo que se
+  // revisa en una corrida sin --publicar es exactamente lo que se publica después.
+  if (existsSync(archivo) && process.env.AGENTE_CACHE !== "no") {
+    return esquema.parse(JSON.parse(readFileSync(archivo, "utf8")).salida);
+  }
+
   if (modoLlm() === "reproducir") {
     const grabacion = existsSync(archivo) ? archivo : ultimaGrabacion(agente);
     if (!grabacion) {
