@@ -1,0 +1,57 @@
+{
+  // Menú para correr el Agente KPIs desde VS Code sin escribir comandos:
+  // Ctrl+Shift+P → "Tasks: Run Task" (Tareas: Ejecutar tarea) → elegir una opción.
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "1 · Demo sin conexión (no escribe nada)",
+      "type": "shell",
+      "command": "npm run demo",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "2 · Evaluar contra respuestas esperadas",
+      "type": "shell",
+      "command": "npm run evaluar",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "3 · Probar con Notion y Jira (solo lectura, genera reporte)",
+      "type": "shell",
+      "command": "npm run probar",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "4 · Publicar en Jira y Notion",
+      "type": "shell",
+      "command": "npm run publicar",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "5 · Reiniciar feedback en Notion (para una demo)",
+      "type": "shell",
+      "command": "npm run reiniciar-notion -- --ultimos ${input:cantidad} --si",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "6 · Abrir el último reporte",
+      "type": "shell",
+      "command": "code salida/cobros-recurrentes/reporte.md",
+      "problemMatcher": [],
+      "presentation": { "reveal": "silent" }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "cantidad",
+      "type": "promptString",
+      "description": "¿Cuántos feedbacks recientes querés volver a dejar sin procesar?",
+      "default": "20"
+    }
+  ]
+}

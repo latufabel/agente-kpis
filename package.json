@@ -4,8 +4,11 @@
   "description": "Sistema multi-agente que convierte feedback de producto en KPIs, evidencia y alertas de desvío (Notion → Claude → Jira).",
   "scripts": {
     "demo": "tsx src/index.ts --demo",
-    "start": "tsx src/index.ts",
     "evaluar": "tsx scripts/evaluar.ts",
+    "probar": "tsx src/index.ts",
+    "publicar": "tsx src/index.ts --publicar",
+    "reiniciar-notion": "tsx scripts/reiniciar-notion.ts",
+    "start": "tsx src/index.ts",
     "typecheck": "tsc --noEmit"
   },
   "repository": {

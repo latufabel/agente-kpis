@@ -147,6 +147,18 @@ flowchart LR
 
 Aprendizaje: los modelos gratuitos de OpenRouter agrupan bien los temas (el Intérprete con `dots-3-note` detectó las cuatro formas y atribuyó la regresión a v1.3), pero se quedan cortos en el paso que más razona, el **Analista**: no suman evidencia al KPI existente y separan peor el ruido. Por eso Gemini es el proveedor por defecto y OpenRouter queda como alternativa.
 
+**Configuración sugerida para producción: OpenRouter con un modelo por agente.** Con una sola clave de OpenRouter (y crédito cargado) se puede asignar a cada agente el modelo que mejor rinde para su tarea, incluidos Gemini y Claude:
+
+```env
+AGENTE_PROVEEDOR=openrouter
+AGENTE_MODELO_CONTEXTO=google/gemini-3.5-flash-lite        # extracción simple, el más barato
+AGENTE_MODELO_INTERPRETE=dots-studio/dots-3-note-preview:free  # agrupó muy bien los temas en las pruebas
+AGENTE_MODELO_ANALISTA=anthropic/claude-sonnet-5.5          # el paso que más razona
+AGENTE_MODELO_DESVIOS=google/gemini-3.6-flash               # 20/20 en las pruebas con Gemini
+```
+
+Costo estimado: menos de USD 0,20 por corrida (unos 70.000 tokens de entrada y 15.000 de salida). Esta combinación todavía no se corrió contra la evaluación: antes de adoptarla, correla con `npm run demo` y `npm run evaluar`.
+
 ---
 
 ## Cómo correrlo
@@ -179,9 +191,13 @@ npm start -- --producto cobros-recurrentes              # lee Notion y Jira y ge
 npm start -- --producto cobros-recurrentes --publicar   # además crea los tickets en Jira y completa Notion
 ```
 
+### Desde VS Code, sin escribir comandos
+
+`Ctrl+Shift+P` → **Tasks: Run Task** → elegí demo, evaluar, probar, publicar o reiniciar el feedback para una demo. Guía paso a paso: [`docs/guia-manual.md`](docs/guia-manual.md).
+
 ### 3. Automático (GitHub Actions)
 
-- [`agente-kpis.yml`](.github/workflows/agente-kpis.yml): días hábiles a las 08:00 (Argentina) corre todos los productos de `config/productos/` y publica. También se puede disparar a mano eligiendo producto y si publica.
+- [`agente-kpis.yml`](.github/workflows/agente-kpis.yml): días hábiles a las 15:00 (Argentina) corre todos los productos de `config/productos/` y publica. También se puede disparar a mano eligiendo producto y si publica.
 - [`ci.yml`](.github/workflows/ci.yml): en cada push corre typecheck, la demo y la evaluación.
 
 Secrets del repositorio: la clave del modelo (`GEMINI_API_KEY`, `OPENROUTER_API_KEY` o `ANTHROPIC_API_KEY`), `NOTION_TOKEN`, `JIRA_EMAIL`, `JIRA_API_TOKEN` y `JIRA_BASE_URL`. Opcional: `AGENTE_PROVEEDOR` (`gemini`, `openrouter` o `anthropic`).
@@ -202,7 +218,8 @@ Secrets del repositorio: la clave del modelo (`GEMINI_API_KEY`, `OPENROUTER_API_
 config/productos/        un archivo por producto
 data/fixtures/           datos de la demo (contexto, 120 feedbacks, KPIs existentes)
 data/grabaciones/demo/   respuestas grabadas del modelo para la demo sin credenciales
-docs/                    definición de producto y reporte de ejemplo
+docs/                    definición de producto, guía manual y reporte de ejemplo
+scripts/reiniciar-notion.ts  deja feedback sin procesar para una demo
 scripts/evaluar.ts       evaluación contra las respuestas esperadas
 src/agentes/             los cuatro agentes
 src/analitica/           métricas determinísticas

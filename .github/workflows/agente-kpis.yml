@@ -1,5 +1,5 @@
 # Corrida automática del Agente KPIs.
-# - Programada: días hábiles 08:00 (Argentina), todos los productos de config/productos/, publicando en Jira y Notion.
+# - Programada: días hábiles 15:00 (Argentina), todos los productos de config/productos/, publicando en Jira y Notion.
 # - Manual (Run workflow): eligís producto y si publica o solo genera el reporte.
 #
 # Secrets requeridos: GEMINI_API_KEY, OPENROUTER_API_KEY o ANTHROPIC_API_KEY, NOTION_TOKEN, JIRA_BASE_URL, JIRA_EMAIL, JIRA_API_TOKEN
@@ -9,7 +9,7 @@ name: Agente KPIs
 
 on:
   schedule:
-    - cron: "0 11 * * 1-5"
+    - cron: "0 18 * * 1-5" # 15:00 en Argentina (UTC-3)
   workflow_dispatch:
     inputs:
       producto:
