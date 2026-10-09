@@ -21,7 +21,7 @@ type Esfuerzo = "low" | "medium" | "high" | "xhigh" | "max";
 
 const MODELO_POR_DEFECTO: Record<Proveedor, string> = {
   anthropic: "claude-opus-5-5",
-  gemini: "gemini-flash-latest",
+  gemini: "gemini-3.5-flash",
 };
 const API_KEY: Record<Proveedor, string> = {
   anthropic: "ANTHROPIC_API_KEY",

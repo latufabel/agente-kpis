@@ -1,0 +1,251 @@
+{
+  "agente": "desvios",
+  "proveedor": "gemini",
+  "modelo": "gemini-3.5-flash",
+  "esfuerzo": "high",
+  "grabado": "2026-10-09T13:41:11.100Z",
+  "duracionMs": 29627,
+  "uso": {
+    "entrada": 7641,
+    "salida": 2872
+  },
+  "salida": {
+    "resumen_ejecutivo": "Se detectó una regresión crítica de alta prioridad a partir de la versión v1.3 debido a fallas severas en el nuevo procesador de correos entrantes, afectando la recepción de comprobantes desde dispositivos móviles. Adicionalmente, se observa un dolor creciente relacionado con la conciliación manual en clientes de mayor escala (Pymes y Clubes) y una demanda constante por soporte del canal WhatsApp. Aunque el NPS muestra una caída alarmante hacia -100 en septiembre, se advierte que la muestra mensual de respuestas es baja (menos de 30 casos) por lo que debe interpretarse con precaución estadística, pero con alta prioridad operativa.",
+    "alertas": [
+      {
+        "alerta_existente": null,
+        "titulo": "Regresión crítica en recepción de comprobantes por mail tras v1.3",
+        "severidad": "critica",
+        "prioridad": 1,
+        "tipo": "regresion",
+        "forma": "pico",
+        "temas": [
+          "Falla en recepción de comprobantes"
+        ],
+        "kpis_relacionados": [
+          "Tasa de falsos negativos en detección de comprobantes",
+          "Tiempo promedio de detección de cuotas impagas"
+        ],
+        "version_relacionada": "v1.3",
+        "descripcion": "Inmediatamente después de la actualización v1.3, se generó un pico abrupto de 21 quejas de clientes reportando que el sistema no recibe ni procesa los comprobantes adjuntos enviados por los pagadores.",
+        "hipotesis_causa": "El nuevo procesador de mails entrantes de la v1.3 diseñado para mejorar la compatibilidad móvil introdujo un bug que impide la correcta extracción de archivos adjuntos cuando se responde desde determinados clientes de correo móvil.",
+        "evidencia": [
+          "FB-84",
+          "FB-85",
+          "FB-86",
+          "FB-87",
+          "FB-89",
+          "FB-90",
+          "FB-91",
+          "FB-92",
+          "FB-94",
+          "FB-95",
+          "FB-96",
+          "FB-97",
+          "FB-98",
+          "FB-99",
+          "FB-101",
+          "FB-103",
+          "FB-105",
+          "FB-107",
+          "FB-108",
+          "FB-111",
+          "FB-115"
+        ],
+        "clientes_en_riesgo": [
+          {
+            "cliente": "EM-014",
+            "motivo": "NPS en caída de 6 a 3 y 2 fallas directas reportadas en FB-91 y FB-98"
+          },
+          {
+            "cliente": "EM-007",
+            "motivo": "NPS en caída libre de 7 a 2, con falla en v1.3 reportada en FB-96"
+          },
+          {
+            "cliente": "EM-021",
+            "motivo": "Emisor grande con 180 pagadores, reportó falla crítica en FB-86"
+          },
+          {
+            "cliente": "EM-031",
+            "motivo": "Emisor con 110 pagadores, reportó falla en FB-94"
+          }
+        ],
+        "advertencias": [
+          "La muestra de NPS del período v1.3 es de apenas 7 respuestas, por lo que el puntaje de -100 requiere mayor volumen para ser estadísticamente concluyente, aunque la gravedad cualitativa está confirmada por los reportes."
+        ],
+        "proximos_pasos": [
+          "Revisar urgentemente los logs del procesamiento de mails de la v1.3 en producción para identificar fallas en la captura de adjuntos.",
+          "Realizar pruebas controladas respondiendo pedidos de cobro desde diferentes marcas de celulares y aplicaciones de mail.",
+          "Considerar un rollback del componente de correos de la v1.3 si la solución del hotfix toma más de 24 horas.",
+          "Contactar proactivamente a los emisores EM-007, EM-014, EM-021 y EM-031 para darles soporte y asegurarles que se está trabajando en el error."
+        ]
+      },
+      {
+        "alerta_existente": null,
+        "titulo": "Inviabilidad operativa y fricción por flujo de conciliación manual a escala",
+        "severidad": "alta",
+        "prioridad": 2,
+        "tipo": "tendencia_creciente",
+        "forma": "creciente",
+        "temas": [
+          "Optimización de la conciliación manual"
+        ],
+        "kpis_relacionados": [
+          "Tiempo promedio mensual de conciliación manual por emisor"
+        ],
+        "version_relacionada": null,
+        "descripcion": "Aumento sostenido de reclamos vinculados al esfuerzo manual requerido para validar cada comprobante, intensificándose significativamente en emisores de los segmentos Pyme y Clubes.",
+        "hipotesis_causa": "A medida que los emisores suman pagadores, la conciliación manual uno a uno en el panel (sin validación automática ni flujo masivo) se vuelve un cuello de botella inmanejable que contradice el objetivo de escala del producto.",
+        "evidencia": [
+          "FB-7",
+          "FB-17",
+          "FB-24",
+          "FB-36",
+          "FB-40",
+          "FB-49",
+          "FB-53",
+          "FB-58",
+          "FB-62",
+          "FB-73",
+          "FB-74",
+          "FB-77",
+          "FB-80",
+          "FB-93",
+          "FB-100",
+          "FB-109",
+          "FB-112",
+          "FB-119"
+        ],
+        "clientes_en_riesgo": [
+          {
+            "cliente": "EM-007",
+            "motivo": "6 feedbacks negativos acumulados sobre conciliación manual y caída severa de NPS"
+          },
+          {
+            "cliente": "EM-031",
+            "motivo": "6 feedbacks negativos, con 110 pagadores sufriendo el proceso manual"
+          },
+          {
+            "cliente": "EM-021",
+            "motivo": "4 feedbacks negativos en este tema y una base grande de 180 pagadores"
+          }
+        ],
+        "advertencias": [],
+        "proximos_pasos": [
+          "Diseñar una opción para la aprobación o procesamiento de cuotas en lote (conciliación masiva).",
+          "Explorar factibilidad técnica de OCR básico para extraer datos del comprobante y pre-aprobar las coincidencias exactas."
+        ]
+      },
+      {
+        "alerta_existente": null,
+        "titulo": "Caída severa de satisfacción general (NPS) y demanda de alertas de impagos",
+        "severidad": "alta",
+        "prioridad": 3,
+        "tipo": "caida_satisfaccion",
+        "forma": "decreciente",
+        "temas": [
+          "Alertas y reportes de impagos"
+        ],
+        "kpis_relacionados": [
+          "Tiempo promedio de detección de cuotas impagas"
+        ],
+        "version_relacionada": null,
+        "descripcion": "El NPS de los usuarios cayó de 38 a -100 de julio a septiembre. Al mismo tiempo, se registra un volumen constante de quejas por no contar con reportes o notificaciones cuando una cuota queda en impaga.",
+        "hipotesis_causa": "Los emisores no logran cumplir el objetivo de saber quién pagó y quién no debido a la falta de notificaciones automáticas y reportes centralizados de mora, requiriendo revisión manual constante.",
+        "evidencia": [
+          "FB-9",
+          "FB-15",
+          "FB-21",
+          "FB-30",
+          "FB-43",
+          "FB-44",
+          "FB-52",
+          "FB-60",
+          "FB-71",
+          "FB-78",
+          "FB-82",
+          "FB-102",
+          "FB-110",
+          "FB-114",
+          "FB-120"
+        ],
+        "clientes_en_riesgo": [
+          {
+            "cliente": "EM-034",
+            "motivo": "5 feedbacks negativos, fuertemente centrados en el reclamo de alertas de impagos"
+          },
+          {
+            "cliente": "EM-018",
+            "motivo": "3 feedbacks negativos enfocados en reportes y alertas de control de cuotas"
+          },
+          {
+            "cliente": "EM-029",
+            "motivo": "4 feedbacks negativos, NPS cayó de 7 a 5"
+          }
+        ],
+        "advertencias": [
+          "Todas las muestras mensuales de NPS son inferiores a 30 respuestas (julio: 8, agosto: 8, septiembre: 9). La fluctuación a -100 es un indicador de alarma pero tiene un margen de error estadístico sumamente alto."
+        ],
+        "proximos_pasos": [
+          "Incluir en el panel de control un widget visual simple que filtre y resalte las cuotas impagas vencidas de manera inmediata.",
+          "Evaluar el desarrollo de avisos automatizados por correo dirigidos a los emisores cuando las cuotas venzan sin comprobantes asociados."
+        ]
+      },
+      {
+        "alerta_existente": null,
+        "titulo": "Demanda crónica de canal alternativo WhatsApp para cobros y respuestas",
+        "severidad": "media",
+        "prioridad": 4,
+        "tipo": "problema_cronico",
+        "forma": "constante",
+        "temas": [
+          "Canal WhatsApp alternativo"
+        ],
+        "kpis_relacionados": [
+          "DEMO-1"
+        ],
+        "version_relacionada": null,
+        "descripcion": "Reclamo continuo de emisores y pagadores por la falta de un canal ágil como WhatsApp, acumulando 21 solicitudes desde el inicio del período evaluado.",
+        "hipotesis_causa": "El correo electrónico tiene baja tasa de apertura y alta demora de respuesta en ciertos segmentos de pagadores cotidianos, limitando la eficiencia de cobro.",
+        "evidencia": [
+          "FB-3",
+          "FB-11",
+          "FB-13",
+          "FB-18",
+          "FB-23",
+          "FB-27",
+          "FB-31",
+          "FB-35",
+          "FB-37",
+          "FB-38",
+          "FB-42",
+          "FB-47",
+          "FB-59",
+          "FB-64",
+          "FB-68",
+          "FB-75",
+          "FB-81",
+          "FB-88",
+          "FB-106",
+          "FB-113",
+          "FB-118"
+        ],
+        "clientes_en_riesgo": [
+          {
+            "cliente": "EM-011",
+            "motivo": "5 feedbacks negativos totales, muy insistente en la necesidad de WhatsApp"
+          },
+          {
+            "cliente": "EM-036",
+            "motivo": "4 feedbacks enfocados en la carencia de WhatsApp para sus 22 pagadores"
+          }
+        ],
+        "advertencias": [],
+        "proximos_pasos": [
+          "Acelerar el análisis del módulo planificado de notificaciones automáticas vía WhatsApp.",
+          "Definir un MVP que permita al menos enviar el enlace de pago o el aviso por WhatsApp de forma manual para probar la adopción."
+        ]
+      }
+    ]
+  }
+}
