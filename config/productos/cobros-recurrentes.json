@@ -1,0 +1,21 @@
+{
+  "id": "cobros-recurrentes",
+  "nombre": "Cobros Recurrentes",
+  "notion": {
+    "paginaContexto": "3f34eed5-9815-817b-a1fe-fb1eefbfb4f1",
+    "dataSourceFeedback": "6f3a3244-edd3-4d2f-9987-68e852220c97"
+  },
+  "jira": {
+    "proyecto": "SCRUM",
+    "tipoKpi": "Epic",
+    "tipoAlerta": "Tarea",
+    "estadoPropuesto": "Propuesto",
+    "pmAccountId": "712020:c21ef809-3881-48df-95b0-98cae439676d",
+    "etiquetaProducto": "producto-cobros-recurrentes"
+  },
+  "fixtures": {
+    "contexto": "data/fixtures/contexto_cobros_recurrentes.md",
+    "feedback": "data/fixtures/feedback_cobros_recurrentes.json",
+    "kpisExistentes": "data/fixtures/kpis_existentes_cobros_recurrentes.json"
+  }
+}

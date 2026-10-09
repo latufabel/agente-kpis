@@ -14,3 +14,6 @@ dist/
 .DS_Store
 Thumbs.db
 .vscode/
+
+# Salidas de corridas locales
+salida/
