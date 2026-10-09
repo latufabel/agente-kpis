@@ -71,7 +71,8 @@ Los equipos de producto lanzan funcionalidades sin saber de dónde parten ni qu�
 3. **Lo contrasta con los KPIs que ya existen en Jira**: si encaja, suma evidencia a ese KPI; si no, propone uno nuevo con definición, fórmula, fuente del dato, **baseline** y objetivo.
 4. **Detecta desvíos**: distingue problemas constantes, picos y tendencias crecientes; atribuye regresiones a la versión que las causó; marca clientes en riesgo y advierte cuando la muestra es chica.
 5. **Crea en Jira** los KPIs y las alertas en estado **Propuesto**, asignados al PM del producto, con la evidencia citada (`FB-n`) y próximos pasos.
-6. **Completa en Notion** los campos `Tema (agente)`, `Sentimiento (agente)` y `Procesado (agente)`.
+6. *(Opcional)* **Sugiere mejoras de producto**: por cada KPI, historias priorizadas con el impacto esperado sobre su baseline y criterios de aceptación, también en *Propuesto*.
+7. **Completa en Notion** los campos `Tema (agente)`, `Sentimiento (agente)` y `Procesado (agente)`.
 
 Una persona decide: el agente nunca aprueba ni descarta nada.
 
@@ -122,6 +123,7 @@ flowchart LR
 | **Analítica** (código) | Conteos por mes, forma de la serie (constante / pico / creciente / decreciente), ventanas simétricas antes y después de cada versión, NPS por período con aviso de muestra chica, clientes con NPS en caída o quejas repetidas | [`src/analitica/metricas.ts`](src/analitica/metricas.ts) |
 | Agente **Analista de KPIs** | Separa ruido de señal; suma evidencia a KPIs existentes o propone nuevos (fórmula, fuente, baseline, objetivo, evidencia, prioridad) | [`src/agentes/analista.ts`](src/agentes/analista.ts) |
 | Agente **Detector de desvíos** | Alertas con severidad, prioridad, hipótesis de causa, clientes en riesgo, advertencias y próximos pasos; no duplica alertas abiertas | [`src/agentes/desvios.ts`](src/agentes/desvios.ts) |
+| Agente **Mejoras sugeridas** *(opcional)* | Historias de mejora priorizadas, cada una vinculada al KPI que busca mover, con impacto esperado, esfuerzo y criterios de aceptación; no repite mejoras abiertas | [`src/agentes/mejoras.ts`](src/agentes/mejoras.ts) |
 | Publicación | Tickets en Jira y campos en Notion, solo con `--publicar` | [`src/salidas/publicar.ts`](src/salidas/publicar.ts) |
 
 ### Decisiones de diseño
@@ -177,6 +179,7 @@ Además de la evaluación automática, el sistema se probó de punta a punta con
 | 8 | **Un KPI descartado que vuelve** | El PM carga feedback nuevo sobre el tema descartado (FB-122) | ✅ El agente lo re-propone con la etiqueta `ya-propuesto`, referencia al ticket descartado y la prioridad más baja |
 | 9 | **Resiliencia ante cuotas** | Corridas con los modelos gratuitos sin cuota (429) o saturados (503) | ✅ Cambia solo al siguiente modelo de la lista de respaldo y termina la corrida |
 | 10 | **CI y ejecución en GitHub** | CI en cada push (sin credenciales) y una corrida manual del workflow con los secrets | ✅ Demo 20/20 en GitHub Actions; la corrida conectada desde GitHub lee Notion y Jira correctamente |
+| 12 | **Mejoras sugeridas** *(opcional)* | Demo y corrida conectada con `--mejoras` | ✅ Propone historias por KPI con impacto medido contra el baseline (p. ej. fallas de detección 50% → < 1% en una semana; conciliación 3-6 min → < 45 s), esfuerzo y criterios de aceptación; si el agente falla o no hay grabación, la corrida sigue sin mejoras |
 | 11 | **Seguridad** | Revisión de todo el historial de git y de los permisos de la integración de Notion | ✅ Sin claves en el historial; la integración ve el producto pero **no** las respuestas esperadas (404) |
 
 **Problemas que encontraron las pruebas y se corrigieron:**
@@ -217,6 +220,8 @@ Completá en `.env` la clave del modelo, `NOTION_TOKEN`, `JIRA_BASE_URL`, `JIRA_
 npm start -- --producto cobros-recurrentes              # lee Notion y Jira y genera el reporte, sin escribir nada
 npm start -- --producto cobros-recurrentes --publicar   # además crea los tickets en Jira y completa Notion
 ```
+
+Para sumar el agente de **mejoras sugeridas**, agregá `--mejoras` o poné `AGENTE_MEJORAS=si` en `.env` (o como secret en GitHub). Es opcional: si falla, el resto de la corrida sigue.
 
 ### Desde VS Code, sin escribir comandos
 
@@ -268,4 +273,4 @@ src/pipeline.ts          orquestador
 - El feedback de prueba es simulado; falta validar con productos y volúmenes reales.
 - Los modelos gratuitos tienen cuotas diarias chicas y se saturan seguido; el agente reintenta solo, pero para uso diario conviene un plan pago o repartir agentes entre proveedores.
 - Con miles de feedbacks por corrida habría que clasificar en lotes con un modelo más chico y resumir antes de analizar.
-- Próximo: medir el impacto de cada versión sobre los KPIs aprobados, sumar más fuentes (soporte, tiendas de apps, analítica) y el backlog de mejoras sugeridas vinculadas a cada KPI.
+- Próximo: medir el impacto de cada versión sobre los KPIs aprobados y sumar más fuentes (soporte, tiendas de apps, analítica).

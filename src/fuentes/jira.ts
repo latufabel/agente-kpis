@@ -10,6 +10,7 @@ import type { AlertaAbierta, ConfigProducto, KpiExistente } from "../tipos.ts";
 export const ETIQUETA_KPI = "kpi";
 export const ETIQUETA_ALERTA = "alerta-desvio";
 export const ETIQUETA_AGENTE = "agente-kpis";
+export const ETIQUETA_MEJORA = "mejora-sugerida";
 const PREFIJO_KPI = "KPI: ";
 
 async function jira<T = any>(metodo: string, ruta: string, cuerpo?: unknown): Promise<T> {
@@ -67,6 +68,15 @@ export async function leerKpisJira(config: ConfigProducto): Promise<KpiExistente
     estado: i.fields.status.name,
     descartado: i.fields.status.name === estadoDescartado,
   }));
+}
+
+/** Títulos de las mejoras sugeridas que siguen abiertas (para no repetirlas). */
+export async function leerMejorasAbiertas(config: ConfigProducto): Promise<string[]> {
+  const { proyecto, etiquetaProducto } = config.jira;
+  const issues = await buscar(
+    `project = "${proyecto}" AND labels = "${ETIQUETA_MEJORA}" AND labels = "${etiquetaProducto}" AND statusCategory != Done ORDER BY key`,
+  );
+  return issues.map((i) => i.fields.summary);
 }
 
 export async function leerAlertasAbiertas(config: ConfigProducto): Promise<AlertaAbierta[]> {

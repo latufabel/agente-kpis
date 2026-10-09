@@ -1,7 +1,7 @@
 // Publica el resultado: KPIs y alertas en Jira (estado "Propuesto", asignados
 // al PM) y los campos "(agente)" en Notion. Solo corre con --publicar.
 
-import { adf, comentar, crearTicket, ETIQUETA_ALERTA, ETIQUETA_KPI, resumenKpi } from "../fuentes/jira.ts";
+import { adf, comentar, crearTicket, ETIQUETA_ALERTA, ETIQUETA_KPI, ETIQUETA_MEJORA, resumenKpi } from "../fuentes/jira.ts";
 import { marcarFeedbackProcesado } from "../fuentes/notion.ts";
 import type { ResultadoCorrida } from "../pipeline.ts";
 import type { ConfigProducto } from "../tipos.ts";
@@ -92,6 +92,34 @@ export async function publicar(config: ConfigProducto, r: ResultadoCorrida): Pro
       clave = await crearTicket(config, ticket);
     }
     console.log(`   + ${clave}  ${ticket.resumen}${padre ? `  (hijo de ${padre})` : ""}`);
+  }
+
+  for (const m of r.mejoras?.mejoras ?? []) {
+    const padre = claveKpi.get(normalizar(m.kpi));
+    const ticket = {
+      tipo: config.jira.tipoAlerta,
+      resumen: `[Mejora P${m.prioridad}] ${m.titulo}`,
+      etiquetas: [ETIQUETA_MEJORA, `esfuerzo-${m.esfuerzo}`],
+      descripcion: adf.doc(
+        adf.parrafo("Mejora sugerida por Agente KPIs. Aprobala moviéndola a «Aprobado» o descartala."),
+        adf.parrafo(m.historia),
+        adf.parrafo(m.descripcion),
+        adf.campo("KPI que mueve", m.kpi),
+        adf.campo("Impacto esperado", m.impacto_esperado),
+        adf.campo("Esfuerzo", m.esfuerzo),
+        adf.campo("Evidencia", m.evidencia.join(", ")),
+        adf.titulo("Criterios de aceptación", 4),
+        adf.lista(m.criterios_aceptacion),
+      ),
+    };
+    let clave: string;
+    try {
+      clave = await crearTicket(config, { ...ticket, padre });
+    } catch (e) {
+      if (!padre) throw e;
+      clave = await crearTicket(config, ticket);
+    }
+    console.log(`   + ${clave}  ${ticket.resumen}${padre ? `  (hija de ${padre})` : ""}`);
   }
 
   console.log("\n⑧ Completando campos (agente) en Notion");

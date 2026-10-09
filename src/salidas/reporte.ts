@@ -46,6 +46,20 @@ export function escribirReporte(dir: string, r: ResultadoCorrida): string {
     L.push(`- **Evidencia:** ${k.evidencia.join(", ")}`, "");
   }
 
+  if (r.mejoras?.mejoras.length) {
+    L.push("## Mejoras sugeridas (estado «Propuesto», a aprobar por el PM)", "");
+    for (const m of r.mejoras.mejoras) {
+      L.push(`### P${m.prioridad} · ${m.titulo}`, "");
+      L.push(`_${m.historia}_`, "");
+      L.push(m.descripcion, "");
+      L.push(`- **KPI que mueve:** ${m.kpi}`);
+      L.push(`- **Impacto esperado:** ${m.impacto_esperado}`);
+      L.push(`- **Esfuerzo:** ${m.esfuerzo}`);
+      L.push(`- **Evidencia:** ${m.evidencia.join(", ")}`);
+      L.push("- **Criterios de aceptación:**", ...m.criterios_aceptacion.map((c) => `  - ${c}`), "");
+    }
+  }
+
   L.push("## Evidencia sumada a KPIs existentes", "");
   if (!analista.evidencia_kpis_existentes.length) L.push("_Ninguna._", "");
   for (const e of analista.evidencia_kpis_existentes) {

@@ -9,10 +9,11 @@ import { agenteContexto, type BriefProducto } from "./agentes/contexto.ts";
 import { agenteInterprete, type Clasificacion, type Tema } from "./agentes/interprete.ts";
 import { agenteAnalista, type SalidaAnalista } from "./agentes/analista.ts";
 import { agenteDesvios, type SalidaDesvios } from "./agentes/desvios.ts";
+import { agenteMejoras, type SalidaMejoras } from "./agentes/mejoras.ts";
 import { analizar, type Analitica } from "./analitica/metricas.ts";
 import { leerContextoFixture, leerFeedbackFixture, leerKpisFixture } from "./fuentes/fixtures.ts";
 import { leerContextoNotion, leerFeedbackNotion } from "./fuentes/notion.ts";
-import { leerAlertasAbiertas, leerKpisJira } from "./fuentes/jira.ts";
+import { leerAlertasAbiertas, leerKpisJira, leerMejorasAbiertas } from "./fuentes/jira.ts";
 import type { AlertaAbierta, ConfigProducto, Feedback, KpiExistente } from "./tipos.ts";
 
 export interface ResultadoCorrida {
@@ -30,11 +31,13 @@ export interface ResultadoCorrida {
   analitica: Analitica;
   analista: SalidaAnalista;
   desvios: SalidaDesvios;
+  /** Solo si se pidieron (--mejoras o AGENTE_MEJORAS=si). */
+  mejoras?: SalidaMejoras;
 }
 
 const paso = (n: string, s: string) => console.log(`\n${n} ${s}`);
 
-export async function correr(config: ConfigProducto, opciones: { demo: boolean }): Promise<ResultadoCorrida | null> {
+export async function correr(config: ConfigProducto, opciones: { demo: boolean; mejoras?: boolean }): Promise<ResultadoCorrida | null> {
   const { demo } = opciones;
 
   paso("①", `Leyendo fuentes (${demo ? "fixtures locales" : "Notion + Jira"})`);
@@ -114,6 +117,27 @@ export async function correr(config: ConfigProducto, opciones: { demo: boolean }
   }
   console.log(`   ${desvios.alertas.length} alertas${incremental ? " con feedback nuevo" : ""}`);
 
+  let mejoras: SalidaMejoras | undefined;
+  const hayNovedades = !incremental || analista.kpis_nuevos.length + analista.evidencia_kpis_existentes.length + desvios.alertas.length > 0;
+  if (opciones.mejoras && hayNovedades) {
+    paso("⑦", "Agente de Mejoras sugeridas");
+    try {
+      const mejorasAbiertas = demo ? [] : await leerMejorasAbiertas(config);
+      const kpisParaMejorar = [
+        ...kpisExistentes.filter((k) => !k.descartado).map((k) => ({ clave: k.clave, nombre: k.nombre, definicion: k.definicion })),
+        ...analista.kpis_nuevos.map((k) => ({ nombre: k.nombre, definicion: k.definicion, baseline: k.baseline })),
+      ];
+      mejoras = await agenteMejoras(brief, kpisParaMejorar, analista, desvios, mejorasAbiertas);
+      const idsValidos = new Set(feedback.map((f) => f.id));
+      for (const m of mejoras.mejoras) m.evidencia = m.evidencia.filter((id) => idsValidos.has(id));
+      console.log(`   ${mejoras.mejoras.length} mejoras propuestas`);
+    } catch (e) {
+      // Es opcional: si falla (sin cuota, sin grabación en la demo), el resto de la corrida sigue.
+      const motivo = (e as Error).message.split("\n")[0];
+      console.warn(`   ⚠ Se omiten las mejoras sugeridas: ${motivo}`);
+    }
+  }
+
   return {
     producto: config.nombre,
     fecha: new Date().toISOString(),
@@ -128,5 +152,6 @@ export async function correr(config: ConfigProducto, opciones: { demo: boolean }
     analitica,
     analista,
     desvios,
+    mejoras,
   };
 }

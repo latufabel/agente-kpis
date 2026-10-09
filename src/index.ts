@@ -25,6 +25,7 @@ const { values } = parseArgs({
     producto: { type: "string", default: "cobros-recurrentes" },
     demo: { type: "boolean", default: false },
     publicar: { type: "boolean", default: false },
+    mejoras: { type: "boolean", default: false },
   },
 });
 
@@ -54,7 +55,8 @@ console.log(
       : "sin API key: reproduciendo respuestas grabadas de una corrida real"),
 );
 
-const resultado = await correr(config, { demo: values.demo });
+const mejoras = values.mejoras || ["si", "sí", "true", "1"].includes((process.env.AGENTE_MEJORAS ?? "").toLowerCase());
+const resultado = await correr(config, { demo: values.demo, mejoras });
 if (resultado) {
   const archivo = escribirReporte(path.join("salida", config.id), resultado);
   console.log(`\n✔ Reporte: ${archivo}`);
