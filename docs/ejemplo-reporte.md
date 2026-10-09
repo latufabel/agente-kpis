@@ -1,6 +1,6 @@
 # Agente KPIs — Cobros Recurrentes
 
-Corrida 2026-10-09 17:46 · modo demo · 120 feedbacks (2026-07-01 a 2026-09-30)
+Corrida 2026-10-09 18:11 · modo demo · 120 feedbacks (2026-07-01 a 2026-09-30)
 
 ## Resumen
 
@@ -143,66 +143,65 @@ Menciones constantes (15 feedbacks acumulados, 4-6 por mes) solicitando alertas 
 
 ## Mejoras sugeridas (estado «Propuesto», a aprobar por el PM)
 
-### P1 · Corrección y robustecimiento del procesador de comprobantes adjuntos en correos entrantes
+### P1 · Restauración y robustez del motor de captura de adjuntos
 
-_Como emisor, quiero que los comprobantes adjuntos enviados por mis pagadores pasen automáticamente al estado Pendiente de Revisión, para no perder el registro de pagos ni tener que conciliar manualmente desde mi casilla personal._
+_Como Emisor, quiero que todos los correos con comprobantes enviados por mis pagadores se detecten correctamente, para evitar el seguimiento manual de pagos que el sistema debería automatizar._
 
-Corregir la regresión introducida en v1.3 en el parser de correos entrantes para identificar y procesar correctamente archivos adjuntos en formatos de imagen (JPG, PNG, HEIC) y PDF. Se debe asegurar compatibilidad con estructuras multipart/inline habituales en respuestas enviadas desde dispositivos móviles y reprocesar los mensajes afectados.
+Corregir el error de parseo introducido en v1.3 que ignora adjuntos en ciertos clientes de correo. Implementar un mecanismo de respaldo que identifique archivos JPG, PNG y PDF en el cuerpo del mail y fuerce el cambio de estado a PENDIENTE DE REVISIÓN.
 
 - **KPI que mueve:** Tasa de fallas en la detección de comprobantes por correo
-- **Impacto esperado:** Reducir la tasa de fallas del 50% del baseline a menos del 1% en la primera semana posterior al despliegue.
-- **Esfuerzo:** bajo
-- **Evidencia:** FB-84, FB-85, FB-86, FB-90, FB-91, FB-95, FB-108, FB-115
+- **Impacto esperado:** Reducir la tasa de fallas del 50% a menos del 2% en una semana tras el despliegue del fix.
+- **Esfuerzo:** medio
+- **Evidencia:** FB-91, FB-84, FB-115, FB-87, FB-103
 - **Criterios de aceptación:**
-  - Las respuestas de correo con archivos adjuntos en PDF, JPG o PNG cambian automáticamente la cuota a PENDIENTE DE REVISIÓN.
-  - El procesador reconoce correctamente adjuntos codificados como inline o multipart enviados desde clientes móviles (Gmail, Apple Mail y Outlook).
-  - Se ejecuta un script de reprocesamiento sobre los correos fallidos recibidos desde el despliegue de v1.3 para recuperar las cuotas afectadas.
+  - El 100% de los mails con adjuntos (formatos imagen/pdf) deben pasar a estado PENDIENTE DE REVISIÓN
+  - Validación exitosa de adjuntos enviados desde versiones móviles de Gmail y Outlook
+  - No se deben perder correos por errores de procesamiento de hilos
 
-### P2 · Conciliación masiva y previsualización rápida en la bandeja de comprobantes
+### P2 · Panel de Conciliación Ágil con Previsualización
 
-_Como emisor, quiero previsualizar y aprobar comprobantes directamente desde la lista general o en lote, para conciliar cobros rápidamente sin tener que ingresar individualmente al detalle de cada pago._
+_Como Emisor, quiero ver el comprobante adjunto sin salir de la lista de pagos, para reducir el tiempo de carga y navegación entre pantallas._
 
-Incorporar selección múltiple en la bandeja de comprobantes para permitir la aprobación en lote ('Marcar como Pagado') de las cuotas en estado Pendiente de Revisión. Además, agregar un panel o modal de vista previa rápida del comprobante sin necesidad de salir de la tabla principal.
+Implementar una vista de conciliación donde, al seleccionar una cuota pendiente, se despliegue una previsualización lateral del comprobante. Añadir un botón de 'Aprobación Rápida' que marque como PAGADO en un solo clic desde la misma fila.
 
 - **KPI que mueve:** Tiempo promedio de conciliación por comprobante
-- **Impacto esperado:** Reducir el tiempo promedio de conciliación del baseline de 3 a 6 minutos a menos de 45 segundos por comprobante en 30 días.
+- **Impacto esperado:** Reducir el tiempo promedio de 3-6 minutos a menos de 45 segundos por comprobante de manera inmediata.
 - **Esfuerzo:** medio
-- **Evidencia:** FB-7, FB-24, FB-40, FB-53, FB-74, FB-93, FB-112
+- **Evidencia:** FB-24, FB-7, FB-116, FB-112, FB-93
 - **Criterios de aceptación:**
-  - El emisor puede seleccionar múltiples comprobantes en estado PENDIENTE DE REVISIÓN y marcarlos simultáneamente como PAGADO con un solo clic.
-  - Existe una previsualización expandible o flotante del comprobante adjunto dentro de la bandeja para validar el importe sin navegar a otra pantalla.
-  - El sistema muestra un mensaje de confirmación que detalla la cantidad exacta de cuotas actualizadas a PAGADO.
+  - Visualización del adjunto en menos de 1 segundo al hacer clic en la fila
+  - Botones de acción (Pagado/No Pagado) siempre visibles en la previsualización
+  - Eliminación de la necesidad de abrir una nueva pestaña por cada comprobante
 
-### P3 · Resumen semanal por correo para el emisor con cuotas vencidas impagas
+### P3 · Recordatorios automáticos de vencimiento por Email
 
-_Como emisor, quiero recibir un reporte periódico consolidado con las cuotas que no fueron pagadas al vencimiento, para enterarme a tiempo de la morosidad sin tener que revisar manualmente cada pago en el panel._
+_Como Pagador, quiero recibir un recordatorio cuando mi cuota está por vencer o vencida, para realizar el pago sin que el emisor tenga que contactarme personalmente._
 
-Implementar un envío semanal automático por correo electrónico dirigido al emisor que liste todas las cuotas en estado No Pagado que hayan superado su fecha de vencimiento. El correo incluirá el nombre del pagador, el monto y los días de atraso, junto a un enlace directo para gestionar la cuota en el panel.
-
-- **KPI que mueve:** Tiempo promedio de detección de cuotas impagas
-- **Impacto esperado:** Reducir el tiempo promedio de detección del baseline de 30 a 60 días a menos de 7 días durante el primer mes de implementación.
-- **Esfuerzo:** bajo
-- **Evidencia:** FB-9, FB-15, FB-21, FB-43, FB-52, FB-60, FB-114
-- **Criterios de aceptación:**
-  - El emisor recibe un correo semanal consolidado únicamente si existen cuotas en estado NO PAGADO con vencimiento cumplido.
-  - El reporte por correo incluye nombre del pagador, fecha de vencimiento, monto adeudado y días de mora acumulados.
-  - Cada ítem del reporte cuenta con un enlace directo a la ficha del pagador dentro del panel de administración.
-
-### P4 · Recordatorio automático por correo al pagador previo y posterior al vencimiento
-
-_Como emisor, quiero que el sistema envíe recordatorios automáticos por correo a los pagadores antes y después del vencimiento, para que recuerden pagar y adjuntar su comprobante sin que yo deba perseguirlos a mano._
-
-Configurar el envío de un correo de recordatorio 48 horas antes de la fecha de vencimiento y un aviso de cuota vencida 48 horas después, en caso de no registrarse aún respuesta con comprobante. Se reforzarán también los registros de autenticación de correo (SPF, DKIM) para asegurar la llegada a la bandeja de entrada y evitar la carpeta de spam.
+Configurar dos disparos automáticos de mail: un recordatorio 48hs antes del vencimiento y un aviso de mora 48hs después del vencimiento si la cuota no está en estado PAGADO o PENDIENTE DE REVISIÓN.
 
 - **KPI que mueve:** DEMO-1
-- **Impacto esperado:** Aumentar la tasa de respuesta al pedido de cobro entre 15 y 25 puntos porcentuales sobre el nivel actual en un plazo de 60 días.
+- **Impacto esperado:** Aumentar la tasa de respuesta en un 25% en el primer ciclo de facturación tras el lanzamiento.
 - **Esfuerzo:** medio
-- **Evidencia:** FB-3, FB-6, FB-11, FB-13, FB-35, FB-55, FB-76, FB-106
+- **Evidencia:** FB-3, FB-13, FB-75, FB-106, FB-113
 - **Criterios de aceptación:**
-  - Se envía automáticamente un correo de recordatorio 48 horas antes del vencimiento si la cuota no tiene un comprobante asociado.
-  - Se envía un recordatorio de cuota vencida 48 horas después de la fecha de vencimiento si el estado continúa en NO PAGADO.
-  - Los correos se envían con autenticación SPF y DKIM válida para minimizar la tasa de caída en bandejas de spam o correo no deseado.
-  - El pagador puede responder directamente al correo de recordatorio adjuntando el comprobante para mover la cuota a PENDIENTE DE REVISIÓN.
+  - Envío automático basado en la fecha de vencimiento configurada
+  - El mail debe incluir el link de respuesta directa para adjuntar el comprobante
+  - Posibilidad para el emisor de desactivar recordatorios por pagador específico
+
+### P4 · Resumen semanal de morosidad para Emisores
+
+_Como Emisor, quiero recibir un informe consolidado de cuotas impagas, para identificar deudores rápidamente sin auditar todo el panel manualmente._
+
+Generar un correo electrónico automático semanal (lunes mañana) que liste todos los pagadores con cuotas en estado NO PAGADO con más de 7 días de antigüedad, incluyendo el monto total adeudado por cada uno.
+
+- **KPI que mueve:** Tiempo promedio de detección de cuotas impagas
+- **Impacto esperado:** Reducir la demora en la detección de 30-60 días a un máximo de 7 días.
+- **Esfuerzo:** bajo
+- **Evidencia:** FB-9, FB-52, FB-120, FB-21, FB-102
+- **Criterios de aceptación:**
+  - El reporte debe incluir nombre del pagador, fecha de vencimiento y monto
+  - Incluir un botón de 'Ver en Panel' que filtre automáticamente a los morosos
+  - El envío debe ser exitoso incluso si hay cero morosos (reporte limpio)
 
 ## Evidencia sumada a KPIs existentes
 

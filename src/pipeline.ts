@@ -123,11 +123,23 @@ export async function correr(config: ConfigProducto, opciones: { demo: boolean; 
     paso("⑦", "Agente de Mejoras sugeridas");
     try {
       const mejorasAbiertas = demo ? [] : await leerMejorasAbiertas(config);
+      // En una corrida incremental, solo se buscan mejoras para los KPIs que recibieron
+      // feedback nuevo (evidencia nueva o una alerta con feedback nuevo que los mueve).
+      const conEvidenciaNueva = new Set([
+        ...analista.evidencia_kpis_existentes.map((e) => e.clave),
+        ...desvios.alertas.flatMap((a) => a.kpis_relacionados),
+      ].map((s) => s.toLowerCase()));
+      const tocado = (k: { clave: string; nombre: string }) =>
+        !incremental || conEvidenciaNueva.has(k.clave.toLowerCase()) || conEvidenciaNueva.has(k.nombre.toLowerCase());
       const kpisParaMejorar = [
-        ...kpisExistentes.filter((k) => !k.descartado).map((k) => ({ clave: k.clave, nombre: k.nombre, definicion: k.definicion })),
+        ...kpisExistentes
+          .filter((k) => !k.descartado && tocado(k))
+          .map((k) => ({ clave: k.clave, nombre: k.nombre, definicion: k.definicion })),
         ...analista.kpis_nuevos.map((k) => ({ nombre: k.nombre, definicion: k.definicion, baseline: k.baseline })),
       ];
-      mejoras = await agenteMejoras(brief, kpisParaMejorar, analista, desvios, mejorasAbiertas);
+      mejoras = kpisParaMejorar.length
+        ? await agenteMejoras(brief, kpisParaMejorar, analista, desvios, mejorasAbiertas)
+        : { mejoras: [] };
       const idsValidos = new Set(feedback.map((f) => f.id));
       for (const m of mejoras.mejoras) m.evidencia = m.evidencia.filter((id) => idsValidos.has(id));
       console.log(`   ${mejoras.mejoras.length} mejoras propuestas`);

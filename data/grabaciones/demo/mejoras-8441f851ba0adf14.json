@@ -1,0 +1,101 @@
+{
+  "agente": "mejoras",
+  "proveedor": "gemini",
+  "modeloPedido": "gemini-3.6-flash",
+  "modelo": "gemini-3-flash-preview",
+  "esfuerzo": "medium",
+  "grabado": "2026-10-09T18:10:14.870Z",
+  "duracionMs": 19306,
+  "uso": {
+    "entrada": 3277,
+    "salida": 1308
+  },
+  "salida": {
+    "mejoras": [
+      {
+        "titulo": "Restauración y robustez del motor de captura de adjuntos",
+        "historia": "Como Emisor, quiero que todos los correos con comprobantes enviados por mis pagadores se detecten correctamente, para evitar el seguimiento manual de pagos que el sistema debería automatizar.",
+        "descripcion": "Corregir el error de parseo introducido en v1.3 que ignora adjuntos en ciertos clientes de correo. Implementar un mecanismo de respaldo que identifique archivos JPG, PNG y PDF en el cuerpo del mail y fuerce el cambio de estado a PENDIENTE DE REVISIÓN.",
+        "kpi": "Tasa de fallas en la detección de comprobantes por correo",
+        "impacto_esperado": "Reducir la tasa de fallas del 50% a menos del 2% en una semana tras el despliegue del fix.",
+        "esfuerzo": "medio",
+        "prioridad": 1,
+        "criterios_aceptacion": [
+          "El 100% de los mails con adjuntos (formatos imagen/pdf) deben pasar a estado PENDIENTE DE REVISIÓN",
+          "Validación exitosa de adjuntos enviados desde versiones móviles de Gmail y Outlook",
+          "No se deben perder correos por errores de procesamiento de hilos"
+        ],
+        "evidencia": [
+          "FB-91",
+          "FB-84",
+          "FB-115",
+          "FB-87",
+          "FB-103"
+        ]
+      },
+      {
+        "titulo": "Panel de Conciliación Ágil con Previsualización",
+        "historia": "Como Emisor, quiero ver el comprobante adjunto sin salir de la lista de pagos, para reducir el tiempo de carga y navegación entre pantallas.",
+        "descripcion": "Implementar una vista de conciliación donde, al seleccionar una cuota pendiente, se despliegue una previsualización lateral del comprobante. Añadir un botón de 'Aprobación Rápida' que marque como PAGADO en un solo clic desde la misma fila.",
+        "kpi": "Tiempo promedio de conciliación por comprobante",
+        "impacto_esperado": "Reducir el tiempo promedio de 3-6 minutos a menos de 45 segundos por comprobante de manera inmediata.",
+        "esfuerzo": "medio",
+        "prioridad": 2,
+        "criterios_aceptacion": [
+          "Visualización del adjunto en menos de 1 segundo al hacer clic en la fila",
+          "Botones de acción (Pagado/No Pagado) siempre visibles en la previsualización",
+          "Eliminación de la necesidad de abrir una nueva pestaña por cada comprobante"
+        ],
+        "evidencia": [
+          "FB-24",
+          "FB-7",
+          "FB-116",
+          "FB-112",
+          "FB-93"
+        ]
+      },
+      {
+        "titulo": "Recordatorios automáticos de vencimiento por Email",
+        "historia": "Como Pagador, quiero recibir un recordatorio cuando mi cuota está por vencer o vencida, para realizar el pago sin que el emisor tenga que contactarme personalmente.",
+        "descripcion": "Configurar dos disparos automáticos de mail: un recordatorio 48hs antes del vencimiento y un aviso de mora 48hs después del vencimiento si la cuota no está en estado PAGADO o PENDIENTE DE REVISIÓN.",
+        "kpi": "DEMO-1",
+        "impacto_esperado": "Aumentar la tasa de respuesta en un 25% en el primer ciclo de facturación tras el lanzamiento.",
+        "esfuerzo": "medio",
+        "prioridad": 3,
+        "criterios_aceptacion": [
+          "Envío automático basado en la fecha de vencimiento configurada",
+          "El mail debe incluir el link de respuesta directa para adjuntar el comprobante",
+          "Posibilidad para el emisor de desactivar recordatorios por pagador específico"
+        ],
+        "evidencia": [
+          "FB-3",
+          "FB-13",
+          "FB-75",
+          "FB-106",
+          "FB-113"
+        ]
+      },
+      {
+        "titulo": "Resumen semanal de morosidad para Emisores",
+        "historia": "Como Emisor, quiero recibir un informe consolidado de cuotas impagas, para identificar deudores rápidamente sin auditar todo el panel manualmente.",
+        "descripcion": "Generar un correo electrónico automático semanal (lunes mañana) que liste todos los pagadores con cuotas en estado NO PAGADO con más de 7 días de antigüedad, incluyendo el monto total adeudado por cada uno.",
+        "kpi": "Tiempo promedio de detección de cuotas impagas",
+        "impacto_esperado": "Reducir la demora en la detección de 30-60 días a un máximo de 7 días.",
+        "esfuerzo": "bajo",
+        "prioridad": 4,
+        "criterios_aceptacion": [
+          "El reporte debe incluir nombre del pagador, fecha de vencimiento y monto",
+          "Incluir un botón de 'Ver en Panel' que filtre automáticamente a los morosos",
+          "El envío debe ser exitoso incluso si hay cero morosos (reporte limpio)"
+        ],
+        "evidencia": [
+          "FB-9",
+          "FB-52",
+          "FB-120",
+          "FB-21",
+          "FB-102"
+        ]
+      }
+    ]
+  }
+}
