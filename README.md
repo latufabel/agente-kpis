@@ -94,6 +94,8 @@ Se probó con **Cobros Recurrentes** (una app de cobro de cuotas por mail) y **1
 
 👉 Reporte completo generado por la demo: [`docs/ejemplo-reporte.md`](docs/ejemplo-reporte.md)
 
+🧾 **¿No tenés acceso a Notion ni a Jira?** En [`docs/evidencia.md`](docs/evidencia.md) está todo lo que el agente escribió en el Notion y el Jira reales durante las pruebas: los tickets, su jerarquía y estados, extractos de lo que escribe y los campos completados en Notion.
+
 ---
 
 ## Arquitectura
