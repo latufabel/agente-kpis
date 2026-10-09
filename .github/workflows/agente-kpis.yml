@@ -2,8 +2,8 @@
 # - Programada: días hábiles 08:00 (Argentina), todos los productos de config/productos/, publicando en Jira y Notion.
 # - Manual (Run workflow): eligís producto y si publica o solo genera el reporte.
 #
-# Secrets requeridos: ANTHROPIC_API_KEY, NOTION_TOKEN, JIRA_EMAIL, JIRA_API_TOKEN
-# Variable requerida: JIRA_BASE_URL (ej. https://tu-sitio.atlassian.net)
+# Secrets requeridos: GEMINI_API_KEY o ANTHROPIC_API_KEY, NOTION_TOKEN, JIRA_EMAIL, JIRA_API_TOKEN
+# Variables: JIRA_BASE_URL (ej. https://tu-sitio.atlassian.net) y, opcional, AGENTE_PROVEEDOR (gemini | anthropic)
 
 name: Agente KPIs
 
@@ -35,6 +35,8 @@ jobs:
     timeout-minutes: 30
     env:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      AGENTE_PROVEEDOR: ${{ vars.AGENTE_PROVEEDOR }}
       NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
       JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
       JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
