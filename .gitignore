@@ -17,3 +17,6 @@ Thumbs.db
 
 # Salidas de corridas locales
 salida/
+
+# Grabaciones de corridas conectadas (datos reales): no se versionan
+data/grabaciones/conectado/

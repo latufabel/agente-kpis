@@ -1,0 +1,718 @@
+{
+  "agente": "interprete",
+  "proveedor": "gemini",
+  "modelo": "gemini-3.5-flash",
+  "esfuerzo": "medium",
+  "grabado": "2026-10-09T14:33:52.613Z",
+  "duracionMs": 67912,
+  "uso": {
+    "entrada": 11411,
+    "salida": 6253
+  },
+  "salida": {
+    "temas": [
+      {
+        "tema": "Notificaciones y cobro por WhatsApp",
+        "descripcion": "Pedido de integración o migración a WhatsApp debido a la baja tasa de lectura y uso del correo electrónico por los pagadores."
+      },
+      {
+        "tema": "Conciliación manual ineficiente para grandes volúmenes",
+        "descripcion": "Inconvenientes y tiempo excesivo requeridos para revisar y aprobar manualmente los comprobantes de pago de a uno."
+      },
+      {
+        "tema": "Falta de alertas y reportes de impagos",
+        "descripcion": "Ausencia de notificaciones o reportes automáticos cuando un pagador se atrasa o queda con cuota impaga."
+      },
+      {
+        "tema": "Fallo en detección de comprobantes desde celulares",
+        "descripcion": "Error a partir de v1.3 donde el sistema no reconoce fotos o capturas pegadas en el correo desde dispositivos móviles."
+      },
+      {
+        "tema": "Elogio general y validación de valor",
+        "descripcion": "Feedback positivo que resalta el valor del producto, la simpleza de uso y la comodidad de pagar sin fricciones."
+      },
+      {
+        "tema": "Problemas de entregabilidad de correo",
+        "descripcion": "Inconvenientes con correos de cobro que no llegan al destinatario o entran directamente a la carpeta de spam."
+      },
+      {
+        "tema": "Consulta de uso",
+        "descripcion": "Preguntas, dudas operativas y de configuración básica que no constituyen una queja o pedido de nueva funcionalidad."
+      },
+      {
+        "tema": "Soporte para múltiples usuarios",
+        "descripcion": "Solicitud de habilitar el acceso de múltiples operadores o personas al panel de administración del emisor."
+      },
+      {
+        "tema": "Personalización de correos con logo",
+        "descripcion": "Deseo de personalizar estéticamente el correo de cobro con imágenes institucionales o logos."
+      },
+      {
+        "tema": "Exportación de datos a Excel",
+        "descripcion": "Solicitud de poder descargar la planilla de pagos y conciliaciones en formato Excel para control contable."
+      },
+      {
+        "tema": "Soporte para cobros con tarjeta",
+        "descripcion": "Solicitud de canales de pago directos con tarjeta de crédito desde el correo de cobro."
+      },
+      {
+        "tema": "Soporte para cobros multimoneda",
+        "descripcion": "Pedido de soporte para gestionar y facturar cuotas en monedas extranjeras como USD."
+      },
+      {
+        "tema": "Soporte para modo oscuro",
+        "descripcion": "Pedido de modo de visualización oscuro en el panel de control para mitigar la fatiga visual de noche."
+      },
+      {
+        "tema": "Mensajes automáticos configurables",
+        "descripcion": "Deseo de modificar el contenido de los mails automáticos de cobro y respuestas del sistema."
+      },
+      {
+        "tema": "Múltiples montos por categoría de pagador",
+        "descripcion": "Necesidad de aplicar tarifas diferenciadas según categorías de socios o clientes."
+      },
+      {
+        "tema": "Descuentos por pronto pago",
+        "descripcion": "Solicitud de configurar automáticamente reducciones en el monto para pagos antes de la fecha de vencimiento."
+      },
+      {
+        "tema": "Recuperación de contraseña en el panel",
+        "descripcion": "Dificultad o falta de opción simple para que el emisor recupere su contraseña."
+      },
+      {
+        "tema": "Pausa temporal de cobros",
+        "descripcion": "Solicitud de suspender el cobro de cuotas temporalmente sin necesidad de dar de baja al pagador."
+      },
+      {
+        "tema": "Aplicación móvil para el emisor",
+        "descripcion": "Solicitud de aplicación o vista móvil optimizada para revisar comprobantes desde celulares."
+      },
+      {
+        "tema": "Integración con Mercado Pago",
+        "descripcion": "Deseo de permitir el cobro directo mediante pasarelas digitales como Mercado Pago."
+      },
+      {
+        "tema": "Emisión automática de recibos",
+        "descripcion": "Necesidad de enviar automáticamente un comprobante o recibo de pago al cliente una vez aprobada la cuota."
+      },
+      {
+        "tema": "Configuración de horario de envío",
+        "descripcion": "Solicitud para programar o personalizar la hora del envío automático del mail de cobro."
+      },
+      {
+        "tema": "Mejoras en el diseño de correos",
+        "descripcion": "Comentarios referidos a la extensión o presentación visual de las notificaciones enviadas."
+      },
+      {
+        "tema": "Historial anual por pagador",
+        "descripcion": "Visualización agregada e histórica de todos los pagos realizados por un cliente a lo largo del año."
+      },
+      {
+        "tema": "Configuración de fecha de vencimiento",
+        "descripcion": "Pedido para personalizar y modificar los días límite de pago de las cuotas."
+      }
+    ],
+    "clasificaciones": [
+      {
+        "id": "FB-1",
+        "sentimiento": "Neutral",
+        "tema": "Consulta de uso"
+      },
+      {
+        "id": "FB-2",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general y validación de valor"
+      },
+      {
+        "id": "FB-3",
+        "sentimiento": "Negativo",
+        "tema": "Notificaciones y cobro por WhatsApp"
+      },
+      {
+        "id": "FB-4",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general y validación de valor"
+      },
+      {
+        "id": "FB-5",
+        "sentimiento": "Positivo",
+        "tema": "Personalización de correos con logo"
+      },
+      {
+        "id": "FB-6",
+        "sentimiento": "Negativo",
+        "tema": "Problemas de entregabilidad de correo"
+      },
+      {
+        "id": "FB-7",
+        "sentimiento": "Negativo",
+        "tema": "Conciliación manual ineficiente para grandes volúmenes"
+      },
+      {
+        "id": "FB-8",
+        "sentimiento": "Neutral",
+        "tema": "Exportación de datos a Excel"
+      },
+      {
+        "id": "FB-9",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas y reportes de impagos"
+      },
+      {
+        "id": "FB-10",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general y validación de valor"
+      },
+      {
+        "id": "FB-11",
+        "sentimiento": "Neutral",
+        "tema": "Notificaciones y cobro por WhatsApp"
+      },
+      {
+        "id": "FB-12",
+        "sentimiento": "Neutral",
+        "tema": "Soporte para cobros con tarjeta"
+      },
+      {
+        "id": "FB-13",
+        "sentimiento": "Negativo",
+        "tema": "Notificaciones y cobro por WhatsApp"
+      },
+      {
+        "id": "FB-14",
+        "sentimiento": "Neutral",
+        "tema": "Soporte para cobros multimoneda"
+      },
+      {
+        "id": "FB-15",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas y reportes de impagos"
+      },
+      {
+        "id": "FB-16",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general y validación de valor"
+      },
+      {
+        "id": "FB-17",
+        "sentimiento": "Neutral",
+        "tema": "Conciliación manual ineficiente para grandes volúmenes"
+      },
+      {
+        "id": "FB-18",
+        "sentimiento": "Negativo",
+        "tema": "Problemas de entregabilidad de correo"
+      },
+      {
+        "id": "FB-19",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general y validación de valor"
+      },
+      {
+        "id": "FB-20",
+        "sentimiento": "Neutral",
+        "tema": "Soporte para modo oscuro"
+      },
+      {
+        "id": "FB-21",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas y reportes de impagos"
+      },
+      {
+        "id": "FB-22",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general y validación de valor"
+      },
+      {
+        "id": "FB-23",
+        "sentimiento": "Negativo",
+        "tema": "Notificaciones y cobro por WhatsApp"
+      },
+      {
+        "id": "FB-24",
+        "sentimiento": "Negativo",
+        "tema": "Conciliación manual ineficiente para grandes volúmenes"
+      },
+      {
+        "id": "FB-25",
+        "sentimiento": "Neutral",
+        "tema": "Consulta de uso"
+      },
+      {
+        "id": "FB-26",
+        "sentimiento": "Neutral",
+        "tema": "Mensajes automáticos configurables"
+      },
+      {
+        "id": "FB-27",
+        "sentimiento": "Negativo",
+        "tema": "Notificaciones y cobro por WhatsApp"
+      },
+      {
+        "id": "FB-28",
+        "sentimiento": "Neutral",
+        "tema": "Múltiples montos por categoría de pagador"
+      },
+      {
+        "id": "FB-29",
+        "sentimiento": "Neutral",
+        "tema": "Consulta de uso"
+      },
+      {
+        "id": "FB-30",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas y reportes de impagos"
+      },
+      {
+        "id": "FB-31",
+        "sentimiento": "Negativo",
+        "tema": "Notificaciones y cobro por WhatsApp"
+      },
+      {
+        "id": "FB-32",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general y validación de valor"
+      },
+      {
+        "id": "FB-33",
+        "sentimiento": "Neutral",
+        "tema": "Consulta de uso"
+      },
+      {
+        "id": "FB-34",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general y validación de valor"
+      },
+      {
+        "id": "FB-35",
+        "sentimiento": "Negativo",
+        "tema": "Notificaciones y cobro por WhatsApp"
+      },
+      {
+        "id": "FB-36",
+        "sentimiento": "Negativo",
+        "tema": "Conciliación manual ineficiente para grandes volúmenes"
+      },
+      {
+        "id": "FB-37",
+        "sentimiento": "Negativo",
+        "tema": "Notificaciones y cobro por WhatsApp"
+      },
+      {
+        "id": "FB-38",
+        "sentimiento": "Negativo",
+        "tema": "Notificaciones y cobro por WhatsApp"
+      },
+      {
+        "id": "FB-39",
+        "sentimiento": "Neutral",
+        "tema": "Descuentos por pronto pago"
+      },
+      {
+        "id": "FB-40",
+        "sentimiento": "Negativo",
+        "tema": "Conciliación manual ineficiente para grandes volúmenes"
+      },
+      {
+        "id": "FB-41",
+        "sentimiento": "Negativo",
+        "tema": "Recuperación de contraseña en el panel"
+      },
+      {
+        "id": "FB-42",
+        "sentimiento": "Negativo",
+        "tema": "Notificaciones y cobro por WhatsApp"
+      },
+      {
+        "id": "FB-43",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas y reportes de impagos"
+      },
+      {
+        "id": "FB-44",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas y reportes de impagos"
+      },
+      {
+        "id": "FB-45",
+        "sentimiento": "Neutral",
+        "tema": "Pausa temporal de cobros"
+      },
+      {
+        "id": "FB-46",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general y validación de valor"
+      },
+      {
+        "id": "FB-47",
+        "sentimiento": "Negativo",
+        "tema": "Notificaciones y cobro por WhatsApp"
+      },
+      {
+        "id": "FB-48",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general y validación de valor"
+      },
+      {
+        "id": "FB-49",
+        "sentimiento": "Negativo",
+        "tema": "Conciliación manual ineficiente para grandes volúmenes"
+      },
+      {
+        "id": "FB-50",
+        "sentimiento": "Neutral",
+        "tema": "Consulta de uso"
+      },
+      {
+        "id": "FB-51",
+        "sentimiento": "Neutral",
+        "tema": "Aplicación móvil para el emisor"
+      },
+      {
+        "id": "FB-52",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas y reportes de impagos"
+      },
+      {
+        "id": "FB-53",
+        "sentimiento": "Neutral",
+        "tema": "Conciliación manual ineficiente para grandes volúmenes"
+      },
+      {
+        "id": "FB-54",
+        "sentimiento": "Positivo",
+        "tema": "Mensajes automáticos configurables"
+      },
+      {
+        "id": "FB-55",
+        "sentimiento": "Negativo",
+        "tema": "Problemas de entregabilidad de correo"
+      },
+      {
+        "id": "FB-56",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general y validación de valor"
+      },
+      {
+        "id": "FB-57",
+        "sentimiento": "Neutral",
+        "tema": "Integración con Mercado Pago"
+      },
+      {
+        "id": "FB-58",
+        "sentimiento": "Negativo",
+        "tema": "Conciliación manual ineficiente para grandes volúmenes"
+      },
+      {
+        "id": "FB-59",
+        "sentimiento": "Neutral",
+        "tema": "Notificaciones y cobro por WhatsApp"
+      },
+      {
+        "id": "FB-60",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas y reportes de impagos"
+      },
+      {
+        "id": "FB-61",
+        "sentimiento": "Neutral",
+        "tema": "Consulta de uso"
+      },
+      {
+        "id": "FB-62",
+        "sentimiento": "Negativo",
+        "tema": "Conciliación manual ineficiente para grandes volúmenes"
+      },
+      {
+        "id": "FB-63",
+        "sentimiento": "Neutral",
+        "tema": "Soporte para múltiples usuarios"
+      },
+      {
+        "id": "FB-64",
+        "sentimiento": "Negativo",
+        "tema": "Notificaciones y cobro por WhatsApp"
+      },
+      {
+        "id": "FB-65",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general y validación de valor"
+      },
+      {
+        "id": "FB-66",
+        "sentimiento": "Neutral",
+        "tema": "Consulta de uso"
+      },
+      {
+        "id": "FB-67",
+        "sentimiento": "Neutral",
+        "tema": "Emisión automática de recibos"
+      },
+      {
+        "id": "FB-68",
+        "sentimiento": "Negativo",
+        "tema": "Notificaciones y cobro por WhatsApp"
+      },
+      {
+        "id": "FB-69",
+        "sentimiento": "Neutral",
+        "tema": "Configuración de horario de envío"
+      },
+      {
+        "id": "FB-70",
+        "sentimiento": "Neutral",
+        "tema": "Mejoras en el diseño de correos"
+      },
+      {
+        "id": "FB-71",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas y reportes de impagos"
+      },
+      {
+        "id": "FB-72",
+        "sentimiento": "Neutral",
+        "tema": "Historial anual por pagador"
+      },
+      {
+        "id": "FB-73",
+        "sentimiento": "Negativo",
+        "tema": "Conciliación manual ineficiente para grandes volúmenes"
+      },
+      {
+        "id": "FB-74",
+        "sentimiento": "Negativo",
+        "tema": "Conciliación manual ineficiente para grandes volúmenes"
+      },
+      {
+        "id": "FB-75",
+        "sentimiento": "Negativo",
+        "tema": "Notificaciones y cobro por WhatsApp"
+      },
+      {
+        "id": "FB-76",
+        "sentimiento": "Negativo",
+        "tema": "Problemas de entregabilidad de correo"
+      },
+      {
+        "id": "FB-77",
+        "sentimiento": "Negativo",
+        "tema": "Conciliación manual ineficiente para grandes volúmenes"
+      },
+      {
+        "id": "FB-78",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas y reportes de impagos"
+      },
+      {
+        "id": "FB-79",
+        "sentimiento": "Positivo",
+        "tema": "Elogio general y validación de valor"
+      },
+      {
+        "id": "FB-80",
+        "sentimiento": "Negativo",
+        "tema": "Conciliación manual ineficiente para grandes volúmenes"
+      },
+      {
+        "id": "FB-81",
+        "sentimiento": "Neutral",
+        "tema": "Notificaciones y cobro por WhatsApp"
+      },
+      {
+        "id": "FB-82",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas y reportes de impagos"
+      },
+      {
+        "id": "FB-83",
+        "sentimiento": "Neutral",
+        "tema": "Consulta de uso"
+      },
+      {
+        "id": "FB-84",
+        "sentimiento": "Negativo",
+        "tema": "Fallo en detección de comprobantes desde celulares"
+      },
+      {
+        "id": "FB-85",
+        "sentimiento": "Negativo",
+        "tema": "Fallo en detección de comprobantes desde celulares"
+      },
+      {
+        "id": "FB-86",
+        "sentimiento": "Negativo",
+        "tema": "Fallo en detección de comprobantes desde celulares"
+      },
+      {
+        "id": "FB-87",
+        "sentimiento": "Negativo",
+        "tema": "Fallo en detección de comprobantes desde celulares"
+      },
+      {
+        "id": "FB-89",
+        "sentimiento": "Negativo",
+        "tema": "Fallo en detección de comprobantes desde celulares"
+      },
+      {
+        "id": "FB-90",
+        "sentimiento": "Negativo",
+        "tema": "Fallo en detección de comprobantes desde celulares"
+      },
+      {
+        "id": "FB-91",
+        "sentimiento": "Negativo",
+        "tema": "Fallo en detección de comprobantes desde celulares"
+      },
+      {
+        "id": "FB-92",
+        "sentimiento": "Negativo",
+        "tema": "Fallo en detección de comprobantes desde celulares"
+      },
+      {
+        "id": "FB-94",
+        "sentimiento": "Negativo",
+        "tema": "Fallo en detección de comprobantes desde celulares"
+      },
+      {
+        "id": "FB-95",
+        "sentimiento": "Negativo",
+        "tema": "Fallo en detección de comprobantes desde celulares"
+      },
+      {
+        "id": "FB-96",
+        "sentimiento": "Negativo",
+        "tema": "Fallo en detección de comprobantes desde celulares"
+      },
+      {
+        "id": "FB-97",
+        "sentimiento": "Negativo",
+        "tema": "Fallo en detección de comprobantes desde celulares"
+      },
+      {
+        "id": "FB-99",
+        "sentimiento": "Negativo",
+        "tema": "Fallo en detección de comprobantes desde celulares"
+      },
+      {
+        "id": "FB-101",
+        "sentimiento": "Negativo",
+        "tema": "Fallo en detección de comprobantes desde celulares"
+      },
+      {
+        "id": "FB-103",
+        "sentimiento": "Negativo",
+        "tema": "Fallo en detección de comprobantes desde celulares"
+      },
+      {
+        "id": "FB-105",
+        "sentimiento": "Negativo",
+        "tema": "Fallo en detección de comprobantes desde celulares"
+      },
+      {
+        "id": "FB-107",
+        "sentimiento": "Negativo",
+        "tema": "Fallo en detección de comprobantes desde celulares"
+      },
+      {
+        "id": "FB-108",
+        "sentimiento": "Negativo",
+        "tema": "Fallo en detección de comprobantes desde celulares"
+      },
+      {
+        "id": "FB-111",
+        "sentimiento": "Negativo",
+        "tema": "Fallo en detección de comprobantes desde celulares"
+      },
+      {
+        "id": "FB-115",
+        "sentimiento": "Negativo",
+        "tema": "Fallo en detección de comprobantes desde celulares"
+      },
+      {
+        "id": "FB-88",
+        "sentimiento": "Negativo",
+        "tema": "Notificaciones y cobro por WhatsApp"
+      },
+      {
+        "id": "FB-93",
+        "sentimiento": "Negativo",
+        "tema": "Conciliación manual ineficiente para grandes volúmenes"
+      },
+      {
+        "id": "FB-98",
+        "sentimiento": "Negativo",
+        "tema": "Notificaciones y cobro por WhatsApp"
+      },
+      {
+        "id": "FB-100",
+        "sentimiento": "Negativo",
+        "tema": "Conciliación manual ineficiente para grandes volúmenes"
+      },
+      {
+        "id": "FB-102",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas y reportes de impagos"
+      },
+      {
+        "id": "FB-104",
+        "sentimiento": "Neutral",
+        "tema": "Configuración de fecha de vencimiento"
+      },
+      {
+        "id": "FB-106",
+        "sentimiento": "Negativo",
+        "tema": "Notificaciones y cobro por WhatsApp"
+      },
+      {
+        "id": "FB-109",
+        "sentimiento": "Negativo",
+        "tema": "Conciliación manual ineficiente para grandes volúmenes"
+      },
+      {
+        "id": "FB-110",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas y reportes de impagos"
+      },
+      {
+        "id": "FB-112",
+        "sentimiento": "Negativo",
+        "tema": "Conciliación manual ineficiente para grandes volúmenes"
+      },
+      {
+        "id": "FB-113",
+        "sentimiento": "Neutral",
+        "tema": "Notificaciones y cobro por WhatsApp"
+      },
+      {
+        "id": "FB-114",
+        "sentimiento": "Negativo",
+        "tema": "Falta de alertas y reportes de impagos"
+      },
+      {
+        "id": "FB-116",
+        "sentimiento": "Neutral",
+        "tema": "Soporte para múltiples usuarios"
+      },
+      {
+        "id": "FB-117",
+        "sentimiento": "Neutral",
+        "tema": "Consulta de uso"
+      },
+      {
+        "id": "FB-118",
+        "sentimiento": "Negativo",
+        "tema": "Notificaciones y cobro por WhatsApp"
+      },
+      {
+        "id": "FB-119",
+        "sentimiento": "Negativo",
+        "tema": "Conciliación manual ineficiente para grandes volúmenes"
+      },
+      {
+        "id": "FB-120",
+        "sentimiento": "Neutral",
+        "tema": "Falta de alertas y reportes de impagos"
+      }
+    ]
+  }
+}

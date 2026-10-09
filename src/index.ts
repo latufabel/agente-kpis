@@ -11,7 +11,7 @@ import { parseArgs } from "node:util";
 import { correr } from "./pipeline.ts";
 import { escribirReporte } from "./salidas/reporte.ts";
 import { publicar } from "./salidas/publicar.ts";
-import { modelo, modoLlm, proveedor } from "./llm.ts";
+import { modelo, modoLlm, proveedor, usarGrabaciones } from "./llm.ts";
 import type { ConfigProducto } from "./tipos.ts";
 
 try {
@@ -46,7 +46,13 @@ if (values.demo && values.publicar) {
   process.exit(1);
 }
 
-console.log(`Agente KPIs · ${config.nombre} · ${proveedor()} ${modelo()} (${modoLlm() === "vivo" ? "en vivo" : "reproduciendo grabaciones"})`);
+usarGrabaciones(values.demo ? "demo" : "conectado");
+console.log(
+  `Agente KPIs · ${config.nombre} · ` +
+    (modoLlm() === "vivo"
+      ? `${proveedor()} ${modelo()} (en vivo)`
+      : "sin API key: reproduciendo respuestas grabadas de una corrida real"),
+);
 
 const resultado = await correr(config, { demo: values.demo });
 if (resultado) {

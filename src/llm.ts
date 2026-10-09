@@ -14,7 +14,12 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 
 import path from "node:path";
 import { z } from "zod";
 
-const DIR_GRABACIONES = "data/grabaciones";
+// Demo y corridas conectadas graban en carpetas separadas: la demo se versiona,
+// las conectadas no (ver .gitignore).
+let dirGrabaciones = "data/grabaciones/demo";
+export function usarGrabaciones(modo: "demo" | "conectado"): void {
+  dirGrabaciones = `data/grabaciones/${modo}`;
+}
 
 type Proveedor = "anthropic" | "gemini";
 type Esfuerzo = "low" | "medium" | "high" | "xhigh" | "max";
@@ -66,16 +71,17 @@ export async function llamarAgente<S extends z.ZodType>(llamada: LlamadaAgente<S
   const prov = proveedor();
   const mod = modelo();
   const huella = createHash("sha256")
-    .update(JSON.stringify({ agente, prov, mod, sistema, entrada, esfuerzo }))
+    // Solo depende de la entrada: una grabación se reproduce aunque cambie el proveedor.
+    .update(JSON.stringify({ agente, sistema, entrada, esfuerzo }))
     .digest("hex")
     .slice(0, 16);
-  const archivo = path.join(DIR_GRABACIONES, `${agente}-${huella}.json`);
+  const archivo = path.join(dirGrabaciones, `${agente}-${huella}.json`);
 
   if (modoLlm() === "reproducir") {
     const grabacion = existsSync(archivo) ? archivo : ultimaGrabacion(agente);
     if (!grabacion) {
       throw new Error(
-        `No hay grabación para el agente "${agente}" en ${DIR_GRABACIONES}/. ` +
+        `No hay grabación para el agente "${agente}" en ${dirGrabaciones}/. ` +
           `Configurá ${API_KEY[prov]} en .env para correrlo en vivo.`,
       );
     }
@@ -88,7 +94,7 @@ export async function llamarAgente<S extends z.ZodType>(llamada: LlamadaAgente<S
   );
   const salida = esquema.parse(r.salida);
 
-  mkdirSync(DIR_GRABACIONES, { recursive: true });
+  mkdirSync(dirGrabaciones, { recursive: true });
   writeFileSync(
     archivo,
     JSON.stringify(
@@ -114,10 +120,10 @@ export async function llamarAgente<S extends z.ZodType>(llamada: LlamadaAgente<S
  * grabación exacta, se usa la más reciente de ese agente.
  */
 function ultimaGrabacion(agente: string): string | null {
-  if (!existsSync(DIR_GRABACIONES)) return null;
-  const candidatas = readdirSync(DIR_GRABACIONES)
+  if (!existsSync(dirGrabaciones)) return null;
+  const candidatas = readdirSync(dirGrabaciones)
     .filter((f) => f.startsWith(`${agente}-`))
-    .map((f) => path.join(DIR_GRABACIONES, f))
+    .map((f) => path.join(dirGrabaciones, f))
     .map((f) => ({ f, fecha: JSON.parse(readFileSync(f, "utf8")).grabado as string }))
     .sort((a, b) => b.fecha.localeCompare(a.fecha));
   if (!candidatas.length) return null;
