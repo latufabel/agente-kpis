@@ -21,7 +21,6 @@ export async function publicar(config: ConfigProducto, r: ResultadoCorrida): Pro
       tipo: config.jira.tipoKpi,
       resumen: resumenKpi(k.nombre),
       etiquetas: [ETIQUETA_KPI, k.ya_propuesto ? "ya-propuesto" : `prioridad-${k.prioridad}`],
-      estado: k.ya_propuesto ? config.jira.estadoYaPropuesto : undefined,
       descripcion: adf.doc(
         adf.parrafo("KPI propuesto por Agente KPIs. Aprobalo moviéndolo a «Por hacer» o descartalo."),
         k.ya_propuesto

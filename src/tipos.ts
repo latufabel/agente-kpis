@@ -11,8 +11,6 @@ export interface ConfigProducto {
     estadoPropuesto: string;
     /** Estado en que el PM deja un KPI que no quiere medir. */
     estadoDescartado: string;
-    /** Estado para un KPI que vuelve a proponerse después de haber sido descartado. */
-    estadoYaPropuesto: string;
     pmAccountId: string;
     etiquetaProducto: string;
   };

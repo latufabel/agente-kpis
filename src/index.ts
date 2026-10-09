@@ -34,7 +34,7 @@ const requeridos = values.demo
   : [
       "id", "nombre", "notion.paginaContexto", "notion.dataSourceFeedback",
       "jira.proyecto", "jira.tipoKpi", "jira.tipoAlerta", "jira.estadoPropuesto",
-      "jira.estadoDescartado", "jira.estadoYaPropuesto", "jira.pmAccountId", "jira.etiquetaProducto",
+      "jira.estadoDescartado", "jira.pmAccountId", "jira.etiquetaProducto",
     ];
 const faltantes = requeridos.filter((ruta) => !ruta.split(".").reduce<any>((o, k) => o?.[k], config));
 if (faltantes.length) {
