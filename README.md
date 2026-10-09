@@ -161,6 +161,33 @@ Costo estimado: menos de USD 0,20 por corrida (unos 70.000 tokens de entrada y 1
 
 ---
 
+## Pruebas realizadas y resultados
+
+Además de la evaluación automática, el sistema se probó de punta a punta contra **Notion y Jira reales**, con el PM operando como lo haría en el día a día.
+
+| # | Prueba | Cómo se hizo | Resultado |
+|---|---|---|---|
+| 1 | **Evaluación contra respuestas esperadas** | `npm run demo` + `npm run evaluar` sobre 120 feedbacks con 4 patrones escondidos y ruido | ✅ **20/20**: detecta los 4 patrones, separa el ruido, distingue forma (constante / pico / creciente), atribuye la regresión a v1.3 como crítica, baselines numéricos, cita FB-n, marca a EM-007 en riesgo y advierte la muestra chica |
+| 2 | **Comparación de modelos** | La misma evaluación con Gemini y con modelos gratuitos de OpenRouter, combinados por agente | ✅ Gemini 3.5 y 3.6 Flash 20/20; OpenRouter gratuito 12 a 16/20 (ver [Modelos](#modelos)) |
+| 3 | **Corrida conectada, solo lectura** | Lee los 120 feedbacks de Notion y el KPI existente de Jira, sin escribir | ✅ 20/20; propone sumar evidencia al KPI existente en vez de duplicarlo |
+| 4 | **Publicación** | La misma corrida con `--publicar` | ✅ 3 KPIs y 4 alertas en Jira (estado *Propuesto*, asignados al PM, alertas hijas de su KPI), comentario de evidencia en el KPI existente y 120 feedbacks con tema y sentimiento en Notion |
+| 5 | **Idempotencia** | Volver a correr sin feedback nuevo | ✅ *"No hay feedback nuevo: nada que hacer"*; no crea nada |
+| 6 | **Feedback nuevo de punta a punta** | El PM carga en Notion un feedback (FB-121, cliente en riesgo que se vuelve a quejar del problema de v1.3) y corre el agente desde VS Code | ✅ Solo FB-121 se suma como evidencia al KPI de comprobantes y se actualiza la alerta crítica abierta; no se repite evidencia vieja ni se crean KPIs ni alertas duplicadas |
+| 7 | **Decisiones del PM** | En Jira: un KPI a *Aprobado*, otro a *En evaluación/reformulación* y otro a *Descartado* | ✅ El agente lee cada estado: los dos primeros siguen recibiendo evidencia; el descartado no |
+| 8 | **Un KPI descartado que vuelve** | El PM carga feedback nuevo sobre el tema descartado (FB-122) | ✅ El agente lo re-propone con la etiqueta `ya-propuesto`, referencia al ticket descartado y la prioridad más baja |
+| 9 | **Resiliencia ante cuotas** | Corridas con los modelos gratuitos sin cuota (429) o saturados (503) | ✅ Cambia solo al siguiente modelo de la lista de respaldo y termina la corrida |
+| 10 | **CI y ejecución en GitHub** | CI en cada push (sin credenciales) y una corrida manual del workflow con los secrets | ✅ Demo 20/20 en GitHub Actions; la corrida conectada desde GitHub lee Notion y Jira correctamente |
+| 11 | **Seguridad** | Revisión de todo el historial de git y de los permisos de la integración de Notion | ✅ Sin claves en el historial; la integración ve el producto pero **no** las respuestas esperadas (404) |
+
+**Problemas que encontraron las pruebas y se corrigieron:**
+- En GitHub (sin API key) la demo reproducía la grabación equivocada y daba 18/20 → las grabaciones ahora dependen solo de la entrada del agente y la demo y las corridas reales graban en carpetas separadas.
+- La caché reutilizaba la respuesta de otro modelo al cambiar de modelo → ahora exige mismo proveedor y modelo.
+- Con feedback nuevo, la corrida repetía evidencia vieja, comentaba alertas sin novedades y proponía un KPI que se pisaba con uno existente → en corridas incrementales solo se publica lo que cita feedback nuevo.
+- Un modelo gratuito se quedó sin cuota en plena demo → respaldo automático entre modelos.
+- La regresión de v1.3 se atribuía a v1.1 cuando dos versiones empataban → ventanas simétricas antes y después de cada versión y desempate por la versión más reciente.
+
+---
+
 ## Cómo correrlo
 
 Requisitos: **Node.js 22 o superior**.
