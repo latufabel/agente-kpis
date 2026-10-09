@@ -1,0 +1,16 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Handoff notes between Claude conversations (private context)
+HANDOFF.md
+
+# Dependencies / build
+node_modules/
+dist/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
