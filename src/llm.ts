@@ -29,6 +29,22 @@ const MODELO_POR_DEFECTO: Record<Proveedor, string> = {
   gemini: "gemini-3.6-flash",
   openrouter: "nvidia/nemotron-3-super-120b-a12b:free",
 };
+// Si el modelo elegido se queda sin cuota o sigue saturado, se prueba el siguiente.
+// Cada modelo gratuito tiene su propia cuota diaria. Se puede pisar con
+// AGENTE_MODELOS_RESPALDO (lista separada por comas).
+const RESPALDO_POR_DEFECTO: Record<Proveedor, string[]> = {
+  anthropic: ["claude-sonnet-5-5"],
+  gemini: ["gemini-3.5-flash", "gemini-3.7-flash", "gemini-3-flash-preview", "gemini-3.8-flash", "gemini-3.5-flash-lite"],
+  openrouter: ["dots-studio/dots-3-note-preview:free", "nvidia/nemotron-3-super-120b-a12b:free"],
+};
+
+function modelosAProbar(principal: string): string[] {
+  const respaldo = process.env.AGENTE_MODELOS_RESPALDO
+    ? process.env.AGENTE_MODELOS_RESPALDO.split(",").map((m) => m.trim()).filter(Boolean)
+    : RESPALDO_POR_DEFECTO[proveedor()];
+  return [principal, ...respaldo.filter((m) => m !== principal)];
+}
+
 const API_KEY: Record<Proveedor, string> = {
   anthropic: "ANTHROPIC_API_KEY",
   gemini: "GEMINI_API_KEY",
@@ -101,13 +117,22 @@ export async function llamarAgente<S extends z.ZodType>(llamada: LlamadaAgente<S
   }
 
   const inicio = Date.now();
-  const r = await conReintentos(agente, () =>
-    prov === "gemini"
-      ? llamarGemini(mod, llamada)
-      : prov === "openrouter"
-        ? llamarOpenRouter(mod, llamada)
-        : llamarClaude(mod, llamada),
-  );
+  const llamar = (m: string) =>
+    prov === "gemini" ? llamarGemini(m, llamada) : prov === "openrouter" ? llamarOpenRouter(m, llamada) : llamarClaude(m, llamada);
+  let r: Respuesta | undefined;
+  const candidatos = modelosAProbar(mod);
+  for (const [i, m] of candidatos.entries()) {
+    try {
+      r = await conReintentos(agente, () => llamar(m));
+      break;
+    } catch (e: any) {
+      const status = e?.status ?? e?.code;
+      const pasarAlSiguiente = status === 429 || (typeof status === "number" && status >= 500) || status === 404;
+      if (!pasarAlSiguiente || i === candidatos.length - 1) throw e;
+      console.warn(`   ↪ ${agente}: ${m} no disponible (${status}); pruebo con ${candidatos[i + 1]}`);
+    }
+  }
+  if (!r) throw new Error(`El agente "${agente}" no obtuvo respuesta.`);
   const salida = esquema.parse(r.salida);
 
   mkdirSync(dirGrabaciones, { recursive: true });
@@ -148,15 +173,18 @@ function ultimaGrabacion(agente: string): string | null {
   return candidatas[0].f;
 }
 
-/** Reintenta ante límites de uso (429) y sobrecarga (5xx), comunes en el plan gratuito. */
+/**
+ * Reintenta una vez ante sobrecarga momentánea (5xx). Ante falta de cuota (429)
+ * no espera: corta para que se pruebe el siguiente modelo de respaldo.
+ */
 async function conReintentos<T>(agente: string, fn: () => Promise<T>): Promise<T> {
   for (let intento = 1; ; intento++) {
     try {
       return await fn();
     } catch (e: any) {
       const status = e?.status ?? e?.code;
-      const reintentable = status === 429 || (typeof status === "number" && status >= 500);
-      if (!reintentable || intento >= 4) throw e;
+      const reintentable = typeof status === "number" && status >= 500;
+      if (!reintentable || intento >= 2) throw e;
       const espera = 15_000 * intento;
       console.warn(`   ⏳ ${agente}: el proveedor respondió ${status}; reintento en ${espera / 1000}s`);
       await new Promise((ok) => setTimeout(ok, espera));

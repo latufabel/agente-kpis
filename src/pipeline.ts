@@ -80,7 +80,22 @@ export async function correr(config: ConfigProducto, opciones: { demo: boolean }
   paso("⑤", "Agente Analista de KPIs: contrastando con los KPIs de Jira");
   const analista = await agenteAnalista(brief, kpisExistentes, analitica.temas, feedback, clasificaciones);
   const accionables = analista.decisiones_temas.filter((d) => d.decision === "accionable").map((d) => d.tema);
-  console.log(`   ${accionables.length} temas accionables · ${analista.kpis_nuevos.length} KPIs nuevos · evidencia para ${analista.evidencia_kpis_existentes.length} KPI(s) existentes`);
+
+  // Corrida incremental: el análisis mira toda la historia, pero solo se publica
+  // lo que tiene feedback nuevo detrás (no se repite evidencia ni se proponen KPIs
+  // por temas que no cambiaron).
+  const nuevos = new Set(interpretado.clasificaciones.map((c) => c.id));
+  const citaNuevo = (ids: string[]) => ids.some((id) => nuevos.has(id));
+  const incremental = previos.length > 0;
+  if (incremental) {
+    const omitidos = analista.kpis_nuevos.filter((k) => !citaNuevo(k.evidencia));
+    analista.kpis_nuevos = analista.kpis_nuevos.filter((k) => citaNuevo(k.evidencia));
+    analista.evidencia_kpis_existentes = analista.evidencia_kpis_existentes
+      .map((e) => ({ ...e, evidencia: e.evidencia.filter((id) => nuevos.has(id)) }))
+      .filter((e) => e.evidencia.length > 0);
+    for (const k of omitidos) console.log(`   (se omite el KPI "${k.nombre}": no hay feedback nuevo sobre ese tema)`);
+  }
+  console.log(`   ${accionables.length} temas accionables · ${analista.kpis_nuevos.length} KPIs nuevos · evidencia nueva para ${analista.evidencia_kpis_existentes.length} KPI(s) existentes`);
 
   paso("⑥", "Agente Detector de desvíos");
   const kpis = [
@@ -88,7 +103,16 @@ export async function correr(config: ConfigProducto, opciones: { demo: boolean }
     ...analista.kpis_nuevos.map((k) => ({ nombre: k.nombre })),
   ];
   const desvios = await agenteDesvios(brief, analitica, accionables, kpis, alertasAbiertas);
-  console.log(`   ${desvios.alertas.length} alertas`);
+  if (incremental) {
+    // El feedback nuevo de un tema se suma a la evidencia de las alertas de ese tema.
+    const temaDe = new Map(interpretado.clasificaciones.map((c) => [c.id, c.tema]));
+    for (const a of desvios.alertas) {
+      const deSusTemas = [...nuevos].filter((id) => a.temas.includes(temaDe.get(id) ?? ""));
+      a.evidencia = [...new Set([...a.evidencia, ...deSusTemas])];
+    }
+    desvios.alertas = desvios.alertas.filter((a) => citaNuevo(a.evidencia));
+  }
+  console.log(`   ${desvios.alertas.length} alertas${incremental ? " con feedback nuevo" : ""}`);
 
   return {
     producto: config.nombre,
