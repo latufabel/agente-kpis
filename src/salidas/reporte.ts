@@ -34,7 +34,8 @@ export function escribirReporte(dir: string, r: ResultadoCorrida): string {
 
   L.push("## KPIs propuestos (estado «Propuesto», a aprobar por el PM)", "");
   for (const k of analista.kpis_nuevos) {
-    L.push(`### P${k.prioridad} · ${k.nombre}`, "");
+    const yaPropuesto = k.ya_propuesto ? ` _(ya propuesto: se descartó en ${k.ya_propuesto}; baja prioridad)_` : "";
+    L.push(`### P${k.prioridad} · ${k.nombre}${yaPropuesto}`, "");
     L.push(`- **Definición:** ${k.definicion}`);
     L.push(`- **Fórmula:** ${k.formula}`);
     L.push(`- **Fuente del dato:** ${k.fuente_datos}`);

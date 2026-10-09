@@ -29,6 +29,18 @@ const { values } = parseArgs({
 });
 
 const config: ConfigProducto = JSON.parse(readFileSync(`config/productos/${values.producto}.json`, "utf8"));
+const requeridos = values.demo
+  ? ["id", "nombre", "fixtures.contexto", "fixtures.feedback", "fixtures.kpisExistentes"]
+  : [
+      "id", "nombre", "notion.paginaContexto", "notion.dataSourceFeedback",
+      "jira.proyecto", "jira.tipoKpi", "jira.tipoAlerta", "jira.estadoPropuesto",
+      "jira.estadoDescartado", "jira.estadoYaPropuesto", "jira.pmAccountId", "jira.etiquetaProducto",
+    ];
+const faltantes = requeridos.filter((ruta) => !ruta.split(".").reduce<any>((o, k) => o?.[k], config));
+if (faltantes.length) {
+  console.error(`Configuración incompleta en config/productos/${values.producto}.json: falta ${faltantes.join(", ")}`);
+  process.exit(1);
+}
 if (values.demo && values.publicar) {
   console.error("--publicar no se puede usar con --demo (la demo nunca escribe en Jira ni Notion).");
   process.exit(1);

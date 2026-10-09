@@ -54,16 +54,18 @@ async function buscar(jql: string): Promise<any[]> {
   return issues;
 }
 
+/** Todos los KPIs del producto, incluidos los descartados (los negocios cambian: pueden volver). */
 export async function leerKpisJira(config: ConfigProducto): Promise<KpiExistente[]> {
-  const { proyecto, etiquetaProducto } = config.jira;
+  const { proyecto, etiquetaProducto, estadoDescartado } = config.jira;
   const issues = await buscar(
-    `project = "${proyecto}" AND labels = "${ETIQUETA_KPI}" AND labels = "${etiquetaProducto}" AND statusCategory != Done ORDER BY key`,
+    `project = "${proyecto}" AND labels = "${ETIQUETA_KPI}" AND labels = "${etiquetaProducto}" ORDER BY key`,
   );
   return issues.map((i) => ({
     clave: i.key,
     nombre: i.fields.summary.replace(PREFIJO_KPI, ""),
     definicion: adfATexto(i.fields.description).trim().slice(0, 1500),
     estado: i.fields.status.name,
+    descartado: i.fields.status.name === estadoDescartado,
   }));
 }
 
@@ -81,6 +83,8 @@ export interface NuevoTicket {
   descripcion: any; // documento ADF
   etiquetas: string[];
   padre?: string;
+  /** Estado destino; por defecto, el estado "Propuesto" del producto. */
+  estado?: string;
 }
 
 export async function crearTicket(config: ConfigProducto, t: NuevoTicket): Promise<string> {
@@ -95,7 +99,7 @@ export async function crearTicket(config: ConfigProducto, t: NuevoTicket): Promi
       ...(t.padre ? { parent: { key: t.padre } } : {}),
     },
   });
-  await moverAEstado(creado.key, config.jira.estadoPropuesto);
+  await moverAEstado(creado.key, t.estado ?? config.jira.estadoPropuesto);
   return creado.key;
 }
 

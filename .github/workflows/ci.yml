@@ -1,0 +1,35 @@
+# Verificación en cada push: tipos, demo sin credenciales (respuestas grabadas) y evaluación.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      AGENTE_LLM: reproducir
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - name: Demo sin credenciales
+        run: npm run demo
+      - name: Evaluación contra respuestas esperadas
+        run: npm run evaluar
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reporte-demo
+          path: salida/
+          if-no-files-found: ignore

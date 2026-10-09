@@ -1,0 +1,74 @@
+# Corrida automática del Agente KPIs.
+# - Programada: días hábiles 08:00 (Argentina), todos los productos de config/productos/, publicando en Jira y Notion.
+# - Manual (Run workflow): eligís producto y si publica o solo genera el reporte.
+#
+# Secrets requeridos: ANTHROPIC_API_KEY, NOTION_TOKEN, JIRA_EMAIL, JIRA_API_TOKEN
+# Variable requerida: JIRA_BASE_URL (ej. https://tu-sitio.atlassian.net)
+
+name: Agente KPIs
+
+on:
+  schedule:
+    - cron: "0 11 * * 1-5"
+  workflow_dispatch:
+    inputs:
+      producto:
+        description: "Producto (archivo en config/productos/, sin .json). Vacío = todos"
+        required: false
+        default: ""
+      publicar:
+        description: "Crear tickets en Jira y completar Notion"
+        type: boolean
+        default: false
+
+# Nunca dos corridas a la vez: evitaría tickets duplicados.
+concurrency:
+  group: agente-kpis
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  correr:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+      JIRA_EMAIL: ${{ secrets.JIRA_EMAIL }}
+      JIRA_API_TOKEN: ${{ secrets.JIRA_API_TOKEN }}
+      JIRA_BASE_URL: ${{ vars.JIRA_BASE_URL }}
+      # En la corrida programada siempre se publica; en la manual, según el input.
+      PUBLICAR: ${{ github.event_name == 'schedule' || inputs.publicar }}
+      PRODUCTO: ${{ inputs.producto }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Correr agente
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -n "${PRODUCTO}" ]; then
+            productos="${PRODUCTO}"
+          else
+            productos=$(ls config/productos/*.json | xargs -n1 basename | sed 's/\.json$//')
+          fi
+          flag=""
+          if [ "${PUBLICAR}" = "true" ]; then flag="--publicar"; fi
+          for p in $productos; do
+            echo "::group::${p}"
+            npm start -- --producto "$p" $flag
+            echo "::endgroup::"
+          done
+      - name: Guardar reportes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reportes-agente-kpis
+          path: salida/
+          if-no-files-found: ignore

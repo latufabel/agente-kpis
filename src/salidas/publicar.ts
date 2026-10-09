@@ -10,7 +10,7 @@ const normalizar = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-
 
 export async function publicar(config: ConfigProducto, r: ResultadoCorrida): Promise<void> {
   const claveKpi = new Map<string, string>();
-  for (const k of r.kpisExistentes) {
+  for (const k of r.kpisExistentes.filter((x) => !x.descartado)) {
     claveKpi.set(normalizar(k.nombre), k.clave);
     claveKpi.set(normalizar(k.clave), k.clave);
   }
@@ -20,9 +20,15 @@ export async function publicar(config: ConfigProducto, r: ResultadoCorrida): Pro
     const clave = await crearTicket(config, {
       tipo: config.jira.tipoKpi,
       resumen: resumenKpi(k.nombre),
-      etiquetas: [ETIQUETA_KPI, `prioridad-${k.prioridad}`],
+      etiquetas: [ETIQUETA_KPI, k.ya_propuesto ? "ya-propuesto" : `prioridad-${k.prioridad}`],
+      estado: k.ya_propuesto ? config.jira.estadoYaPropuesto : undefined,
       descripcion: adf.doc(
         adf.parrafo("KPI propuesto por Agente KPIs. Aprobalo moviéndolo a «Por hacer» o descartalo."),
+        k.ya_propuesto
+          ? adf.parrafo(
+              `Ya se había propuesto y se descartó (${k.ya_propuesto}). La evidencia actual lo vuelve a justificar; queda con baja prioridad para que lo reconsideres.`,
+            )
+          : null,
         adf.campo("Definición", k.definicion),
         adf.campo("Fórmula", k.formula),
         adf.campo("Fuente del dato", k.fuente_datos),

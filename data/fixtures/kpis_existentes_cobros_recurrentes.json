@@ -3,6 +3,7 @@
     "clave": "DEMO-1",
     "nombre": "Tasa de respuesta al pedido de cobro",
     "definicion": "Porcentaje de pedidos de cobro enviados por mail que reciben una respuesta del pagador (con o sin comprobante) antes del siguiente vencimiento.",
-    "estado": "Por hacer"
+    "estado": "Por hacer",
+    "descartado": false
   }
 ]

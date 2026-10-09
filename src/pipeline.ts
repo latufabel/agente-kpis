@@ -84,7 +84,7 @@ export async function correr(config: ConfigProducto, opciones: { demo: boolean }
 
   paso("⑥", "Agente Detector de desvíos");
   const kpis = [
-    ...kpisExistentes.map((k) => ({ clave: k.clave, nombre: k.nombre })),
+    ...kpisExistentes.filter((k) => !k.descartado).map((k) => ({ clave: k.clave, nombre: k.nombre })),
     ...analista.kpis_nuevos.map((k) => ({ nombre: k.nombre })),
   ];
   const desvios = await agenteDesvios(brief, analitica, accionables, kpis, alertasAbiertas);

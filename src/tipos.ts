@@ -9,6 +9,10 @@ export interface ConfigProducto {
     tipoKpi: string;
     tipoAlerta: string;
     estadoPropuesto: string;
+    /** Estado en que el PM deja un KPI que no quiere medir. */
+    estadoDescartado: string;
+    /** Estado para un KPI que vuelve a proponerse después de haber sido descartado. */
+    estadoYaPropuesto: string;
     pmAccountId: string;
     etiquetaProducto: string;
   };
@@ -46,4 +50,6 @@ export interface KpiExistente {
   nombre: string;
   definicion: string;
   estado: string;
+  /** El PM lo descartó: no se mide hoy, pero puede volver a proponerse con baja prioridad. */
+  descartado: boolean;
 }
